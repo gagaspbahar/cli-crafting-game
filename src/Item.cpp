@@ -17,13 +17,20 @@ Item::Item(int id, string name, string type) : id(this->numOfItem + 1){
 }
 
 Item::~Item(){
-
 }
 
 int Item::getId() const{
-    this->id;
+    return this->id;
 }
 
-string getName(){
+string Item::getType() const{
+    return this->type;
+}
 
+string Item::getName() const{
+    return this->name;
+}
+
+bool operator==(const Item& i1, const Item& i2){
+    return ((i1.getId() == i2.getId()) && (i1.getName() == i2.getName()) && (i1.getType() == i2.getType()));
 }

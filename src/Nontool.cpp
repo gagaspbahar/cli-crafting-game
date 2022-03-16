@@ -14,6 +14,14 @@ NonTool::~NonTool(){
 
 }
 
+int NonTool::getQty() const{
+    return this->quantity;
+}
+
+string NonTool::getNtType() const{
+    return this->nttype;
+}
+
 void NonTool::use(){
 
 }
