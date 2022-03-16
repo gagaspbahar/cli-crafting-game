@@ -6,30 +6,20 @@ using namespace std;
 
 class Item {
 protected :
+    static int numOfItem;
     const int id;
     string name;
     string type;
 public :
-	Item();
+	// Constructor
+    Item();
+    Item(int id, string name, string type);
+    // Destructor
     ~Item();
+    // Getter
+    int getId() const;
+    string getName();
+    virtual void use() = 0;
 };
-
-class Tool : public Item {
-protected :
-	int quantity;
-public :
-	
-};
-
-//(derivation from Tool -> Pickaxe, Axe, Sword)
-
-class NonTool : public Item {
-protected :
-	int durability;
-public :
-	
-};
-//(derivation from nonTool -> Stone dll)
-
 
 #endif
