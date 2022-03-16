@@ -18,7 +18,9 @@ public :
     ~Item();
     // Getter
     int getId() const;
-    string getName();
+    string getName() const;
+    string getType() const;
+    friend bool operator==(const Item& i1, const Item& i2);
     virtual void use() = 0;
 };
 
