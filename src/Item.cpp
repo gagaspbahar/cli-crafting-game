@@ -6,13 +6,13 @@ int Item::numOfItem = 0;
 
 Item::Item() : id(this->numOfItem + 1){
     this->name = "";
-    this->type = "";
+    this->category = "";
     Item::numOfItem++;
 }
 
-Item::Item(int id, string name, string type) : id(this->numOfItem + 1){
+Item::Item(int id, string name, string category) : id(this->numOfItem + 1){
     this->name = name;
-    this->type = type; // Tool or NonTool
+    this->category = category; // Tool or NonTool
     Item::numOfItem++;
 }
 
@@ -23,8 +23,8 @@ int Item::getId() const{
     return this->id;
 }
 
-string Item::getType() const{
-    return this->type;
+string Item::getCategory() const{
+    return this->category;
 }
 
 string Item::getName() const{
@@ -32,5 +32,5 @@ string Item::getName() const{
 }
 
 bool operator==(const Item& i1, const Item& i2){
-    return ((i1.getId() == i2.getId()) && (i1.getName() == i2.getName()) && (i1.getType() == i2.getType()));
+    return ((i1.getId() == i2.getId()) && (i1.getName() == i2.getName()) && (i1.getCategory() == i2.getCategory()));
 }

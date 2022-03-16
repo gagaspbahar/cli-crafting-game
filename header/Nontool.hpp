@@ -8,13 +8,13 @@ using namespace std;
 class NonTool : public Item {
 protected :
 	int quantity;
-    string nttype;
+    string type;
 public :
 	NonTool();
     NonTool(int id, string name, string type, int quantity);
     ~NonTool();
     int getQty() const;
-    string getNtType() const;
+    string getType() const;
     void use();
 };
 //(derivation from nonTool -> Stone dll)
