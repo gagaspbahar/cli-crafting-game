@@ -24,3 +24,6 @@ check: FORCE check.cpp
 	./check
 
 FORCE: ;
+
+testmain:
+	g++ testmain.cpp src/Config.cpp -o testmain && ./testmain
