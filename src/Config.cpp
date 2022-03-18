@@ -1,4 +1,5 @@
 #include "../header/Config.hpp"
+#include "../header/Exception.hpp"
 
 string Config::directory = "./config/";
 
@@ -12,13 +13,24 @@ Config::Config()
 
 void Config::getItemFromText()
 {
-  ifstream input(directory + "item.txt");
-  ItemConfig temp;
-  string id, name, parentClass, category;
-  while (input >> id >> name >> parentClass >> category)
+  try
   {
-    temp = {stoi(id), name, parentClass, category};
-    this->itemList.push_back(temp);
+    ifstream input(directory + "item.tzxt");
+    if (input.fail())
+    {
+      throw FileNotFoundException();
+    }
+    ItemConfig temp;
+    string id, name, parentClass, category;
+    while (input >> id >> name >> parentClass >> category)
+    {
+      temp = {stoi(id), name, parentClass, category};
+      this->itemList.push_back(temp);
+    }
+  }
+  catch (BaseException& e)
+  {
+    e.printMessage();
   }
 }
 
