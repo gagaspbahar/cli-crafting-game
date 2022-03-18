@@ -15,7 +15,7 @@ void Config::getItemFromText()
 {
   try
   {
-    ifstream input(directory + "item.tzxt");
+    ifstream input(directory + "item.txt");
     if (input.fail())
     {
       throw FileNotFoundException();
@@ -40,4 +40,12 @@ void Config::printItems()
   {
     cout << it->id << " " << it->name << " " << it->parentClass << " " << it->category << endl;
   }
+}
+
+void Config::getRecipes() {
+  vector<string> recipePathList;
+  for (const auto & entry : filesystem::directory_iterator(recipe_directory)){
+    recipePathList.push_back(entry.path().string());
+  }
+  // TODO: masukin hasil recipenya ke config
 }

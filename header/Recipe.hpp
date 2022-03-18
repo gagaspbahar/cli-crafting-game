@@ -1,7 +1,9 @@
 #ifndef RECIPE_H
 #define RECIPE_H
 
-#include <bits/stdc++.h>
+#include <map>
+#include <string>
+#include <vector>
 
 using namespace std;
 

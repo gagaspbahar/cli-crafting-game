@@ -5,6 +5,8 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <filesystem>
+#include "Recipe.hpp"
 
 using namespace std;
 
@@ -18,6 +20,7 @@ struct ItemConfig {
 class Config {
   private:
     vector<ItemConfig> itemList;
+    vector<Recipe> recipeList;
     int itemCount;
     int recipeCount;
     static string directory;
@@ -26,6 +29,7 @@ class Config {
     Config();
     void printItems();
     void getItemFromText();
+    void getRecipes();
 };
 
 
