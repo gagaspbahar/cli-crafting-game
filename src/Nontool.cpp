@@ -9,7 +9,7 @@ NonTool::NonTool() : Item(){
 
 NonTool::NonTool(int id, string name, string type, int quantity) : Item(id, name, "NonTool"){
     this->type = type;
-    this->quantity = 0;
+    this->quantity = quantity;
 }
 
 // DESTRUCTOR
