@@ -11,16 +11,29 @@ protected :
     string name;
     string category;
 public :
-	// Constructor
+	// CONSTRUCTOR
     Item();
     Item(int id, string name, string category);
-    // Destructor
+    
+    // DESTRUCTOR
     ~Item();
-    // Getter
+
+    // GETTER
     int getId() const;
     string getName() const;
     string getCategory() const;
+
+    // SETTER
+    void setId(int);
+    void setName(string);
+    void setCategory(string);
+    
+    // OPERATOR OVERLOADING
+    virtual Item& operator +=(int) = 0;
+    virtual Item& operator -=(int) = 0;
     friend bool operator==(const Item& i1, const Item& i2);
+    
+    // USE FUNCTION
     virtual void use() = 0;
 };
 
