@@ -4,6 +4,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <sstream>
+#include <fstream>
+#include <iostream>
 
 using namespace std;
 
@@ -18,7 +21,7 @@ public:
     int getCol(string item);
     int getQty(string item);
     string getItemName(string item);
-    string getRecipe(string item, int row, int col);
+    string getRecipeComponent(string item, int row, int col);
     void printRecipe(string item);
     void printInfo(string item);
 };

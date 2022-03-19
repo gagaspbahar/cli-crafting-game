@@ -54,7 +54,7 @@ string Recipe::getItemName(string item) {
     return this->item[item];
 }
 
-string Recipe::getRecipe(string item, int row, int col) {
+string Recipe::getRecipeComponent(string item, int row, int col) {
     return this->recipe[item][row][col];
 }
 
