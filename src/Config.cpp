@@ -49,3 +49,30 @@ void Config::getRecipes() {
   }
   // TODO: masukin hasil recipenya ke config
 }
+
+string Config::getNameFromID(int id) {
+  for (auto i = this->itemList.begin(); i != itemList.end(); i++) {
+    if (i->id == id) {
+      return i->name;
+    }
+  }
+  return "notfound";
+}
+
+string Config::getTypeFromID(int id) {
+  for (auto i = this->itemList.begin(); i != itemList.end(); i++) {
+    if (i->id == id) {
+      return i->parentClass;;
+    }
+  }
+  return "notfound";
+}
+
+string Config::getCategoryFromID(int id) {
+  for (auto i = this->itemList.begin(); i != itemList.end(); i++) {
+    if (i->id == id) {
+      return i->category;
+    }
+  }
+  return "notfound";
+}

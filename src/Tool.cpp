@@ -22,17 +22,9 @@ int Tool::getDura() const{
     return this->durability;
 }
 
-string Tool::getType() const{
-    return this->type;
-}
-
 // SETTER
 void Tool::setDura(int Dura){
     this->durability = Dura;
-}
-
-void Tool::setType(string type){
-    this->type = type;
 }
 
 // USE
