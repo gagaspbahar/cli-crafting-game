@@ -11,26 +11,25 @@ protected :
 	int durability;
 public :
     // CONSTRUCTOR
-	NonTool();
-    NonTool(int id, string name, string type, int quantity);
+	Tool();
+    Tool(int id, string name, int durability);
     
     // DESTRUCTOR
-    ~NonTool();
+    Tool();
     
     // GETTER
-    int getQty() const;
+    int getDura() const;
     
     // SETTER
-    void setQty(int);
+    void setDura(int);
     
     // USE
     void use();
     
     // OPERATOR OVERLOADING
-    friend ostream & operator <<(ostream&, const NonTool&);
+    friend ostream & operator <<(ostream&, const Tool&);
     Item& operator +=(int);
     Item& operator -=(int);
-};
 };
 
 //(derivation from Tool -> Pickaxe, Axe, Sword)
