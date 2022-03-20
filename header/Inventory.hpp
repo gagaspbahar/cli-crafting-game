@@ -29,7 +29,7 @@ class Inventory {
 
         // Move
         void moveItem(string idSrc, string idDest);
-        void moveToCrafting(string slotIdInventory, int N, string* slotIdCrafting, Crafting table);
+        void moveToCrafting(string slotIdInventory, int N, string* slotIdCrafting, CraftingTable table);
        
         // Export
         void exportInventory(string outputPath);

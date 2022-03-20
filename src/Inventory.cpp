@@ -142,7 +142,7 @@ void Inventory::moveItem(string idSrc, string idDest) {
 }
 
 // moveToCrafting
-void Inventory::moveToCrafting(string slotIdInventory, int N, string* slotIdCrafting, Crafting table) {
+void Inventory::moveToCrafting(string slotIdInventory, int N, string* slotIdCrafting, CraftingTable table) {
     int rowInventory = getRow(convertIdToInt(slotIdInventory));
     int colInventory = getCol(convertIdToInt(slotIdInventory)); 
     int rowCrafting, colCrafting;
