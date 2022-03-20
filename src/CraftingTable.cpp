@@ -12,8 +12,8 @@ int CraftingTable::getItem(int row, int col) {
     return this->table[row][col];
 }
 
-void CraftingTable::setItem(int row, int col, int id) {
-	this->table[row][col] = id;
+void CraftingTable::setItem(Item* item, int row, int col) {
+	this->table[row][col] = item;
 }
 
 CraftingTable CraftingTable::mirrorTable() {

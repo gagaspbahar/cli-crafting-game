@@ -10,8 +10,8 @@ class CraftingTable {
     public:
         CraftingTable();
         CraftingTable(vector<vector<int>>);
-        int getItem(int,int);
-        void setItem(int,int,int);
+        int getItem(int, int);
+        void setItem(Item*, int, int);
         CraftingTable mirrorTable();
         void printTable(Config);
 };
