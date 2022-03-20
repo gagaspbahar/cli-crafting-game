@@ -2,16 +2,18 @@
 #define CRAFTINGTABLE_H
 
 #include <vector>
-#include "Item.hpp"
+#include "Config.hpp"
 
 class CraftingTable {
     private:
-        vector<vector<Item>> table;
+        vector<vector<int>> table;
     public:
         CraftingTable();
-        CraftingTable(vector<vector<Item>> table);
-        Item& getItem(int row, int col);
-        void printTable();
+        CraftingTable(vector<vector<int>>);
+        int getItem(int,int);
+        void setItem(int,int,int);
+        CraftingTable mirrorTable();
+        void printTable(Config);
 };
 
 #endif

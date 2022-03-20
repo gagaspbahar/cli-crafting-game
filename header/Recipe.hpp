@@ -16,7 +16,8 @@ private:
     map<string, string> item;
     map<string, vector<vector<string>>> recipe;
 public:
-    Recipe(vector<string> path);
+    Recipe();
+    Recipe(string path);
     int getRow(string item);
     int getCol(string item);
     int getQty(string item);

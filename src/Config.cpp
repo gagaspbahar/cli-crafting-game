@@ -7,6 +7,8 @@ string Config::recipe_directory = "./config/recipe";
 
 Config::Config()
 {
+  this->itemList = vector<ItemConfig>();
+  this->recipe = Recipe();
   this->itemCount = 0;
   this->recipeCount = 0;
 }
@@ -43,11 +45,7 @@ void Config::printItems()
 }
 
 void Config::getRecipes() {
-  vector<string> recipePathList;
-  for (const auto & entry : filesystem::directory_iterator(recipe_directory)){
-    recipePathList.push_back(entry.path().string());
-  }
-  // TODO: masukin hasil recipenya ke config
+  this->recipe = Recipe(recipe_directory);
 }
 
 string Config::getNameFromID(int id) {

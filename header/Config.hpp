@@ -20,7 +20,7 @@ struct ItemConfig {
 class Config {
   private:
     vector<ItemConfig> itemList;
-    vector<Recipe> recipeList;
+    Recipe recipe;
     int itemCount;
     int recipeCount;
     static string directory;

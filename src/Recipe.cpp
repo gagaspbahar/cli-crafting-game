@@ -1,7 +1,22 @@
 #include "../header/Recipe.hpp"
 
-Recipe::Recipe(vector<string> path) {
-    for(auto it = begin(path); it != end(path); ++it) {
+Recipe::Recipe(){
+    this->row = map<string, int>();
+    this->col = map<string, int>();
+    this->item = map<string, string>();
+    this->qty = map<string, int>();
+    this->recipe = map<string, vector<vector<string>>>();
+}
+
+Recipe::Recipe(string path) {
+    // get all recipe txt file
+    vector<string> recipePathList;
+    for (const auto & entry : filesystem::directory_iterator(path)){
+        recipePathList.push_back(entry.path().string());
+    }
+
+    // adding every recipe to map
+    for(auto it = begin(recipePathList); it != end(recipePathList); ++it) {
         ifstream file(*it);
         string line;
         int row, col, qty;
