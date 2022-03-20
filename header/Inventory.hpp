@@ -53,7 +53,7 @@ public:
     // Menambahkan item ke inventory
     void giveItem(T item, int qty) {
         idx = this->getIdxItem(item);
-        if ((isExist(item) != -1) && (this->inv[idx].second + qty < MAX_CAP)) {
+        if ((getIdxItem(item) != -1) && (this->inv[idx].second + qty < MAX_CAP)) {
             this->inv[idx].second += qty;
         } else {
             lastSlot =  this->getLastSlot();
