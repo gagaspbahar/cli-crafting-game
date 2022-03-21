@@ -11,6 +11,7 @@
 using namespace std;
 
 struct ItemConfig {
+  // Empty ItemConfig = {-1,"","",""} (for crafting table use)
   int id;
   string name;
   string parentClass;
@@ -29,7 +30,8 @@ class Config {
     Config();
     void printItems();
     void getItemFromText();
-    void getRecipes();
+    void getRecipesFromText();
+    Recipe getRecipe();
     string getNameFromID(int id);
     string getTypeFromID(int id);
     string getCategoryFromID(int id);

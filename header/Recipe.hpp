@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 
 using namespace std;
 
@@ -22,7 +23,9 @@ public:
     int getCol(string item);
     int getQty(string item);
     string getItemName(string item);
-    string getRecipeComponent(string item, int row, int col);
+    string getRecipeComponentByLocation(string item, int row, int col);
+    vector<string> getRecipeComponents(string item);
+    vector<vector<string>> getRecipePattern(string item);
     void printRecipe(string item);
     void printInfo(string item);
 };

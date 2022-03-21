@@ -44,8 +44,12 @@ void Config::printItems()
   }
 }
 
-void Config::getRecipes() {
+void Config::getRecipesFromText() {
   this->recipe = Recipe(recipe_directory);
+}
+
+Recipe Config::getRecipe() {
+  return this->recipe;
 }
 
 string Config::getNameFromID(int id) {

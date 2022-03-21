@@ -69,8 +69,25 @@ string Recipe::getItemName(string item) {
     return this->item[item];
 }
 
-string Recipe::getRecipeComponent(string item, int row, int col) {
+string Recipe::getRecipeComponentByLocation(string item, int row, int col) {
     return this->recipe[item][row][col];
+}
+
+vector<string> Recipe::getRecipeComponents(string item) {
+    vector<string> components;
+    for (int i = 0; i < this->row[item]; i++) {
+        for (int j = 0; j < this->col[item]; j++) {
+            if (this->recipe[item][i][j] != "") {
+                components.push_back(getRecipeComponentByLocation(item, i, j));
+            }
+        }
+    }
+    sort(components.begin(), components.end());
+    return components;
+}
+
+vector<vector<string>> Recipe::getRecipePattern(string item) {
+    return this->recipe[item];
 }
 
 void Recipe::printRecipe(string item) {

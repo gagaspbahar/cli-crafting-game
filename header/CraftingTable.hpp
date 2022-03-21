@@ -3,18 +3,21 @@
 
 #include <vector>
 #include "Config.hpp"
-#include "Item.hpp"
 
 class CraftingTable {
     private:
-        vector<vector<Item*>> table;
+        vector<vector<ItemConfig>> table;
     public:
         CraftingTable();
-        CraftingTable(vector<vector<Item*>>);
-        Item* getItem(int, int);
-        void setItem(Item*, int, int);
+        CraftingTable(vector<vector<ItemConfig>>);
+        ItemConfig getItem(int, int);
+        void setItem(ItemConfig, int, int);
+        void delItem(int,int);
         CraftingTable mirrorTable();
-        vector<vector<vector<Item*>>> getSubmatrices(int, int);
+        vector<ItemConfig> getItemOnTable();
+        bool isCompositionValid(Config,string);
+        bool isPatternValid(Config,string);
+        vector<vector<vector<ItemConfig>>> getSubmatrices(int, int);
         void printTable();
 };
 
