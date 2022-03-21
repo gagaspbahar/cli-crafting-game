@@ -5,6 +5,7 @@
 #include "Item.hpp"
 #include "Tool.hpp"
 #include "Nontool.hpp"
+#include "InventoryException.hpp"
 using namespace std;
 
 class SlotInventory {

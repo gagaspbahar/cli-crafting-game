@@ -4,6 +4,7 @@
 #include <bits/stdc++.h>
 #include "SlotInventory.hpp"
 #include "CraftingTable.hpp"
+#include "InventoryException.hpp"
 using namespace std;
 
 int convertIdToInt(string id);
