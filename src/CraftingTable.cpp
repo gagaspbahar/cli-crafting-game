@@ -28,6 +28,23 @@ CraftingTable CraftingTable::mirrorTable() {
 	return CraftingTable(mTable);
 }
 
+vector<vector<vector<Item*>> > CraftingTable::getSubmatrices(int w, int h) {
+	vector<vector<vector<Item*>>> submatrices;
+	for (int i = 0 ; i < 4 - h ; i++){
+		for(int j = 0 ; j < 4 - w ; j++){
+			vector<vector<Item*>> submatrix;
+			for(int k = i ; k < i+h ; k++){
+				vector<Item*> subrow;
+				for(int l = j ; l < j+w ; l++){
+					subrow.push_back(this->table[k][l]);
+				}
+				submatrix.push_back(subrow);
+			}
+			submatrices.push_back(submatrix);
+		}
+	}
+}
+
 void CraftingTable::printTable() {
     // Get Max ItemName length
 	int mw = 0;

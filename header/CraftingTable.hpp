@@ -14,6 +14,7 @@ class CraftingTable {
         Item* getItem(int, int);
         void setItem(Item*, int, int);
         CraftingTable mirrorTable();
+        vector<vector<vector<Item*>>> getSubmatrices(int, int);
         void printTable();
 };
 
