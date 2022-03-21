@@ -164,7 +164,28 @@ void Inventory::moveToCrafting(string slotIdInventory, int N, string* slotIdCraf
     }
 }
 
-// Export inventory
+// showInventory
+void Inventory::showInventory() {
+    int slotId = 0;
+    for (int i = 0; i < sizeRow; i++) {
+        for (int j = 0; j < sizeCol; j++) {
+            Item* temp = this->inventoryContainer[i][j].getItemInfo();
+            if (this->inventoryContainer[i][j].getQuantity() == 0) {
+                cout << "[ I " << slotId << " ] ";
+            } else if (temp->isA<NonTool>()) {
+                NonTool* nt = dynamic_cast<NonTool*>(temp);
+                cout << "[ " << nt->getName() << "," << this->inventoryContainer[i][j].getQuantity() << " ] ";
+            } else {
+                Tool* t = dynamic_cast<Tool*>(temp);
+                cout << "[ " << t->getName() << "," << t->getDura() << " ] ";
+            }
+            slotId++;
+        }
+        cout << endl;
+    }
+}
+
+// exportInventory
 void Inventory::exportInventory(string outputPath) {
     ofstream outputFile(outputPath);
     for (int i = 0; i < sizeRow; i++) {

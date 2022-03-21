@@ -32,6 +32,9 @@ class Inventory {
         void moveItem(string idSrc, string idDest);
         void moveToCrafting(string slotIdInventory, int N, string* slotIdCrafting, CraftingTable table);
        
+        // Show
+        void showInventory();
+
         // Export
         void exportInventory(string outputPath);
 
