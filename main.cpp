@@ -1,62 +1,71 @@
-// sample main file, replace this with your own code
-#include <filesystem>
-#include <fstream>
 #include <iostream>
-#include <string>
+#include "./header/Config.hpp"
+#include "./header/CraftingTable.hpp"
+#include "./header/Exception.hpp"
+#include "./header/Inventory.hpp"
+#include "./header/InventoryException.hpp"
+#include "./header/Item.hpp"
+#include "./header/Nontool.hpp"
+#include "./header/Recipe.hpp"
+#include "./header/SlotInventory.hpp"
+#include "./header/Tool.hpp"
 
 using namespace std;
 
-int main() {
-  string configPath = "./config";
-  string itemConfigPath = configPath + "/item.txt";
+int main(){
+  cout << "Welcome to M1necraft!" << endl;
+  cout << "Please wait for the configs to load.." << endl;
 
-  // read item from config file
-  ifstream itemConfigFile(itemConfigPath);
-  for (string line; getline(itemConfigFile, line);) {
-    cout << line << endl;
-    // do something
-  }
+  Config config;
+  config.getItemFromText();
+  config.getRecipesFromText();
 
-  // read recipes
-  for (const auto &entry :
-       filesystem::directory_iterator(configPath + "/recipe")) {
-    cout << entry.path() << endl;
-    // read from file and do something
-  }
+  cout << "Done!\n" << endl;
+  cout << "What do you want to do?" << endl;
 
-  // sample interaction
   string command;
-  while (cin >> command) {
-    if (command == "EXPORT") {
-      string outputPath;
-      cin >> outputPath;
-      ofstream outputFile(outputPath);
-
-      // hardcode for first test case
-      outputFile << "21:10" << endl;
-      outputFile << "6:1" << endl;
-      for (int i = 2; i < 27; i++) {
-        outputFile << "0:0" << endl;
-      }
-
-      cout << "Exported" << endl;
-    } else if (command == "CRAFT") {
-      cout << "TODO" << endl;
-    } else if (command == "GIVE") {
+  while(cin >> command){
+    if(command == "SHOW"){
+      // TODO
+    }
+    else if (command == "GIVE"){
       string itemName;
       int itemQty;
       cin >> itemName >> itemQty;
-      cout << "TODO" << endl;
-    } else if (command == "MOVE") {
+      // TODO
+    }
+    else if (command == "DISCARD"){
+      // TODO
+    }
+    else if (command == "MOVE"){
       string slotSrc;
       int slotQty;
       string slotDest;
-      // need to handle multiple destinations
       cin >> slotSrc >> slotQty >> slotDest;
-      cout << "TODO" << endl;
-    } else {
-      // todo
-      cout << "Invalid command" << endl;
+      // TODO: need to parse slotDest for multiple destinations.
+      // TODO
+    }
+    else if (command == "USE"){
+      int inventorySlot;
+      cin >> inventorySlot;
+      // TODO
+    }
+    else if (command == "CRAFT"){
+      // TODO
+    }
+    else if (command == "EXPORT"){
+      string outputPath;
+      cin >> outputPath;
+      // TODO
+    }
+    else if (command == "HELP"){
+      // TODO
+    }
+    else if (command == "QUIT"){
+      // TODO
+    }
+    else{
+      cout << "Invalid command! Please try again." << endl;
     }
   }
   return 0;

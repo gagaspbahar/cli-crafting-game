@@ -28,6 +28,7 @@ class Config {
     static string recipe_directory;
   public:
     Config();
+    void printHelp();
     void printItems();
     void getItemFromText();
     void getRecipesFromText();

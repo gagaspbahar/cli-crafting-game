@@ -78,3 +78,7 @@ string Config::getCategoryFromID(int id) {
   }
   return "notfound";
 }
+
+void Config::printHelp(){
+  
+}

@@ -15,7 +15,7 @@ public :
     Tool(int id, string name, int durability);
     
     // DESTRUCTOR
-    Tool();
+    ~Tool();
     
     // GETTER
     int getDura() const;

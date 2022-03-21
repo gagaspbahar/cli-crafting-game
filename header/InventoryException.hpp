@@ -29,3 +29,5 @@ public:
         cout << "You can't stack two different items, moving process failed.";
     }
 };
+
+#endif
