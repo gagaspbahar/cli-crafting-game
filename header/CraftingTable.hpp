@@ -3,17 +3,18 @@
 
 #include <vector>
 #include "Config.hpp"
+#include "Item.hpp"
 
 class CraftingTable {
     private:
-        vector<vector<int>> table;
+        vector<vector<Item*>> table;
     public:
         CraftingTable();
-        CraftingTable(vector<vector<int>>);
-        int getItem(int, int);
+        CraftingTable(vector<vector<Item*>>);
+        Item* getItem(int, int);
         void setItem(Item*, int, int);
         CraftingTable mirrorTable();
-        void printTable(Config);
+        void printTable();
 };
 
 #endif
