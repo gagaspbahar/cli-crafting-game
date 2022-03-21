@@ -35,6 +35,12 @@ public :
     
     // USE FUNCTION
     virtual void use() = 0;
+
+    // FOR DYNAMIC CASTING
+    template<typename T>
+        bool isA() {
+            return (dynamic_cast<T*>(this) != NULL);
+        }
 };
 
 #endif
