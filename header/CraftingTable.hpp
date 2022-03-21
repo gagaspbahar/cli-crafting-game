@@ -4,6 +4,9 @@
 #include <vector>
 #include "Config.hpp"
 
+int getRowCraft(int integer);
+int getColCraft(int integer);
+
 class CraftingTable {
     private:
         vector<vector<ItemConfig>> table;

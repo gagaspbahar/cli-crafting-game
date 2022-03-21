@@ -10,11 +10,11 @@ int convertIdToInt(string id) {
     return temp;
 }
 
-int getRow(int integer) {
+int getRowInv(int integer) {
     return (int)(integer / 9);
 }
 
-int getCol(int integer) {
+int getColInv(int integer) {
     return (integer % 9);
 }
 
@@ -119,10 +119,10 @@ void Inventory::discardItem(string id, int quantity) {
 
 // moveItem
 void Inventory::moveItem(string idSrc, string idDest) {
-    int rowSrc = getRow(convertIdToInt(idSrc));
-    int colSrc = getCol(convertIdToInt(idSrc));
-    int rowDest = getRow(convertIdToInt(idDest));
-    int colDest = getCol(convertIdToInt(idDest));
+    int rowSrc = getRowInv(convertIdToInt(idSrc));
+    int colSrc = getColInv(convertIdToInt(idSrc));
+    int rowDest = getRowInv(convertIdToInt(idDest));
+    int colDest = getColInv(convertIdToInt(idDest));
     if ((this->inventoryContainer[rowSrc][colSrc].getNameFromSlotItem() == this->inventoryContainer[rowDest][colDest].getNameFromSlotItem()) && (this->inventoryContainer[rowSrc][colSrc].getCategoryFromSlotItem() == this->inventoryContainer[rowDest][colDest].getCategoryFromSlotItem()) && ((this->inventoryContainer[rowSrc][colSrc].getItemInfo())->isA<NonTool>()) && ((this->inventoryContainer[rowDest][colDest].getItemInfo())->isA<NonTool>())) {
         // Move
         int quantityToMove;
@@ -145,16 +145,16 @@ void Inventory::moveItem(string idSrc, string idDest) {
 
 // moveToCrafting
 void Inventory::moveToCrafting(string slotIdInventory, int N, string* slotIdCrafting, CraftingTable table) {
-    int rowInventory = getRow(convertIdToInt(slotIdInventory));
-    int colInventory = getCol(convertIdToInt(slotIdInventory)); 
+    int rowInventory = getRowInv(convertIdToInt(slotIdInventory));
+    int colInventory = getColInv(convertIdToInt(slotIdInventory)); 
     int rowCrafting, colCrafting;
     int idx = N;
     if (this->inventoryContainer[rowInventory][colInventory].getQuantity() >= N) {
         if (N < 9) {
             for (int i = N - 1; i >= 0; i--) {
                 idx--;
-                rowCrafting = getRow(convertIdToInt(slotIdCrafting[idx]));
-                colCrafting = getCol(convertIdToInt(slotIdCrafting[idx]));
+                rowCrafting = getRowCraft(convertIdToInt(slotIdCrafting[idx]));
+                colCrafting = getColCraft(convertIdToInt(slotIdCrafting[idx]));
                 // Add item to crafting
                 table.setItem(this->inventoryContainer[rowInventory][colInventory].getItemInfo(), rowCrafting, colCrafting);
             }

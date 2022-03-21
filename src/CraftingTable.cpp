@@ -1,5 +1,13 @@
 #include "../header/CraftingTable.hpp"
 
+int getRowCraft(int integer) {
+    return (int)(integer / 3);
+}
+
+int getColCraft(int integer) {
+    return (integer % 3);
+}
+
 CraftingTable::CraftingTable() {
 	vector<vector<ItemConfig>> table;
 	for (int i = 0; i < 3; i++) {
