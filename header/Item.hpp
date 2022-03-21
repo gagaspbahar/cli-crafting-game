@@ -28,6 +28,9 @@ public :
     void setName(string);
     void setCategory(string);
     
+    // OPERATOR ASSIGNMENT
+    Item& operator=(const Item& item);
+    
     // OPERATOR OVERLOADING
     virtual Item& operator +=(int) = 0;
     virtual Item& operator -=(int) = 0;
