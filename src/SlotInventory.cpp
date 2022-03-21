@@ -18,7 +18,8 @@ SlotInventory::SlotInventory(Item* slotContainer, int quantity, int slotId) {
         this->quantity = quantity;
         this->slotContainer = slotContainer;
     } else {
-        cout << "Sorry, the item quantity is over the maximum capacity." << endl;
+        FullException* err = new FullException();
+        throw err;
     }
 }
 
@@ -28,7 +29,8 @@ SlotInventory::SlotInventory(const SlotInventory& si) {
         this->quantity = si.quantity;
         this->slotContainer = si.slotContainer;
     } else {
-        cout << "Sorry, the item quantity is over the maximum capacity." << endl;
+        FullException* err = new FullException();
+        throw err;
     }
 }
 

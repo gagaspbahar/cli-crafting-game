@@ -108,7 +108,8 @@ void Inventory::discardItem(string id, int quantity) {
                             this->inventoryContainer[i][j] = SlotInventory();
                         }
                     } else {
-                        cout << "Insufficient number of items, discarding process failed." << endl;
+                        EmptyException* err = new EmptyException();
+                        throw err;
                     }
                 }
             }
@@ -137,7 +138,8 @@ void Inventory::moveItem(string idSrc, string idDest) {
         // Remove
         this->inventoryContainer[rowSrc][colSrc].removeItem(quantityToMove);
     } else {
-        cout << "You can't stack two different items, moving process failed." << endl;
+        DifferentItemException* err = new DifferentItemException();
+        throw err;
     }
 }
 
