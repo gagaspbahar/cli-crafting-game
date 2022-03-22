@@ -4,12 +4,17 @@ using namespace std;
 
 // CONSTRUCTOR
 Tool::Tool() : Item(){
-    this->durability = 0;
+    this->durability = 10;
 }
 
-Tool::Tool(int id, string name, string type, int durability) : Item(id, name, "Tool"){
+Tool::Tool(int id, string name, int durability) : Item(id, name, "Tool"){
     this->type = type;
     this->durability = durability ;
+}
+
+Tool::Tool(int id, string name) : Item(id, name, "Tool"){
+    this->type = type;
+    this->durability = 10 ;
 }
 
 // DESTRUCTOR

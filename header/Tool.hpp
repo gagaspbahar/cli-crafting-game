@@ -13,6 +13,7 @@ public :
     // CONSTRUCTOR
 	Tool();
     Tool(int id, string name, int durability);
+    Tool(int id, string name); // ini durability nya udah auto set 10 di awal
     
     // DESTRUCTOR
     ~Tool();
