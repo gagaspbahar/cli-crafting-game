@@ -79,6 +79,10 @@ string Config::getCategoryFromID(int id) {
   return "notfound";
 }
 
+vector<ItemConfig> Config::getItemList() {
+  return this->itemList;
+}
+
 void Config::printHelp(){
   
 }

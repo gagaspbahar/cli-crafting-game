@@ -3,24 +3,31 @@
 
 #include <vector>
 #include "Config.hpp"
+#include "Item.hpp"
+#include "Tool.hpp"
+#include "Nontool.hpp"
 
 int getRowCraft(int integer);
 int getColCraft(int integer);
 
 class CraftingTable {
     private:
-        vector<vector<ItemConfig>> table;
+        vector<vector<Item*>> table;
     public:
         CraftingTable();
-        CraftingTable(vector<vector<ItemConfig>>);
-        ItemConfig getItem(int, int);
-        void setItem(ItemConfig, int, int);
+        CraftingTable(vector<vector<Item*>>);
+        Item* getItem(int, int);
+        void setItem(Item*, int, int);
         void delItem(int,int);
         CraftingTable mirrorTable();
-        vector<ItemConfig> getItemOnTable();
+        vector<Item*> getItemOnTable();
+        bool isAllTool();
+        bool isAllNonTool();
+        bool isTwoTool();
         bool isCompositionValid(Config,string);
         bool isPatternValid(Config,string);
-        vector<vector<vector<ItemConfig>>> getSubmatrices(int, int);
+        vector<vector<vector<Item*>>> getSubmatrices(int, int);
+        Item* craft(Config);
         void printTable();
 };
 

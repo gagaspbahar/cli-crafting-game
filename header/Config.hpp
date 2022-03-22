@@ -36,6 +36,7 @@ class Config {
     string getNameFromID(int id);
     string getTypeFromID(int id);
     string getCategoryFromID(int id);
+    vector<ItemConfig> getItemList();
 };
 
 
