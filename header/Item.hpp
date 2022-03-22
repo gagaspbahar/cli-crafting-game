@@ -1,19 +1,20 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 using namespace std;
 
 class Item {
 protected :
-    static int numOfItem;
-    const int id;
+    int id;
     string name;
     string category;
 public :
 	// CONSTRUCTOR
     Item();
-    Item(int id, string name, string category);
+    Item(int, string, string);
+    Item(const Item&);
     
     // DESTRUCTOR
     ~Item();
@@ -34,7 +35,7 @@ public :
     // OPERATOR OVERLOADING
     virtual Item& operator +=(int) = 0;
     virtual Item& operator -=(int) = 0;
-    friend bool operator==(const Item& i1, const Item& i2);
+    friend bool operator==(const Item&, const Item&);
     
     // USE FUNCTION
     virtual void use() = 0;

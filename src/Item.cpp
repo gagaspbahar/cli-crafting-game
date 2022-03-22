@@ -2,20 +2,23 @@
 #include <iostream>
 using namespace std;
 
-// INITIALIZE
-int Item::numOfItem = 0;
-
 // CONSTRUCTOR
-Item::Item() : id(this->numOfItem + 1) {
+Item::Item() {
+    this->id = 0;
     this->name = "";
     this->category = "";
-    Item::numOfItem++;
 }
 
-Item::Item(int id, string name, string category) : id(this->numOfItem + 1) {
+Item::Item(int id, string name, string category){
     this->name = name;
     this->category = category; // Tool or NonTool
-    Item::numOfItem++;
+    this->id = id;
+}
+
+Item::Item(const Item& i){
+    this->id = i.id;
+    this->name = i.name;
+    this->category = i.category;
 }
 
 // DESTRUCTOR
@@ -50,8 +53,9 @@ void Item::setCategory(string category) {
 }
 
 // OPERATOR ASSIGNMENT
-Item& Item::operator=(const Item& item) : id(item.id) {
+Item& Item::operator=(const Item& item){
     this->name = item.name;
+    this->id = item.id;
     this->category = item.category;
     return *this;
 }
