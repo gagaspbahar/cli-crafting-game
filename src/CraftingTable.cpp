@@ -51,7 +51,27 @@ CraftingTable CraftingTable::mirrorTable() {
 	return CraftingTable(mTable);
 }
 
-vector<Item*> CraftingTable::getItemOnTable() {
+vector<string> CraftingTable::getNonToolOnTable() {
+	/* I.S. : Crafting Table terdefinisi */
+	/* F.S. : Mengembalikan vector<string> yang berisi nama item yang ada di table */
+	vector<string> itemOnTable;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (this->table[i][j]->getId() != 0) {
+				if(this->table[i][j]->getType() == "-"){
+					itemOnTable.push_back(this->table[i][j]->getName());
+				}
+				else{
+					itemOnTable.push_back(this->table[i][j]->getType());
+				}
+			}
+		}
+	}
+	sort(itemOnTable.begin(), itemOnTable.end());
+	return itemOnTable;
+}
+
+vector<Item*> CraftingTable::getToolOnTable() {
 	/* I.S. : Crafting Table terdefinisi */
 	/* F.S. : Mengembalikan vector<string> yang berisi nama item yang ada di table */
 	vector<Item*> itemOnTable;
@@ -120,20 +140,19 @@ bool CraftingTable::isCompositionValid(Config config, string name) {
 	/* I.S. : Config terdefinisi, name terdefinisi */
 	/* F.S. : Mengembalikan true jika jumlah dan jenis bahan yang dibutuhkan untuk membuat item tersebut sesuai dengan resep*/
 	vector<string> ingredients = config.getRecipe().getRecipeComponents(name);
-	vector<Item*> itemOnTable = getItemOnTable();
+	vector<string> itemOnTable = getNonToolOnTable();
 	
 	if (itemOnTable.size() < ingredients.size()) {
 		return false;
 	}
 
 	// Check by name
-	bool nameStatus = true, typeStatus = true;
-	for(int i = 0 ; i < ingredients.size() && (nameStatus || typeStatus) ; i++){
-		nameStatus = ingredients[i] == itemOnTable[i]->getName();
-		typeStatus = ingredients[i] == itemOnTable[i]->getType();
+	bool status = true;
+	for(int i = 0 ; i < ingredients.size() && status ; i++){
+		status = ingredients[i] == itemOnTable[i];
 	}
 
-	return nameStatus || typeStatus;
+	return status;
 }
 
 bool CraftingTable::isPatternValid(Config config, string item){
@@ -166,7 +185,7 @@ bool CraftingTable::isPatternValid(Config config, string item){
 
 Item* CraftingTable::craft(Config config){
 	if(isAllTool() && isTwoTool()){
-		vector<Item*> itemOnTable = getItemOnTable();
+		vector<Item*> itemOnTable = getToolOnTable();
 		int newDura = itemOnTable[0]->getDura() + itemOnTable[1]->getDura();
 		if (newDura > 10){
 			newDura = 10;
