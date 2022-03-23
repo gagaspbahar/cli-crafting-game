@@ -1,0 +1,4 @@
+2 2
+LOG LOG
+LOG LOG
+WOOD 3
