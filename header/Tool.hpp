@@ -1,7 +1,7 @@
 #ifndef TOOL_HPP
 #define TOOL_HPP
 
-#include <bits/stdc++.h>
+#include <string>
 #include <iostream>
 #include "Item.hpp"
 using namespace std;

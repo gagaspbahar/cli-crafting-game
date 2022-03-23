@@ -1,7 +1,8 @@
 #ifndef _SLOTINVENTORY_HPP_
 #define _SLOTINVENTORY_HPP_
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 #include "Item.hpp"
 #include "Tool.hpp"
 #include "Nontool.hpp"

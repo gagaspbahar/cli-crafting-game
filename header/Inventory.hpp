@@ -1,7 +1,8 @@
 #ifndef _INVENTORY_HPP_
 #define _INVENTORY_HPP_
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 #include "SlotInventory.hpp"
 #include "CraftingTable.hpp"
 #include "InventoryException.hpp"
