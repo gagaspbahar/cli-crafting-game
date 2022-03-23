@@ -39,6 +39,10 @@ void NonTool::setType(string type){
     this->type = type;
 }
 
+void NonTool::use(){
+    
+}
+
 // OPERATOR OVERLOADING
 ostream & operator <<(ostream& os, const NonTool& nt){
     os << "[" << nt.getId() << " " << nt.getQty() << "]";
