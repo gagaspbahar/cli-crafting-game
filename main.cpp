@@ -36,10 +36,12 @@ int main(){
       string itemName;
       int itemQty;
       cin >> itemName >> itemQty;
-      // TODO
+      int itemID = config.getIDFromName(itemName);
+      string itemCategory = config.getCategoryFromID(itemID);
+      Item* tempItem = new Item(itemID, itemName, itemCategory);
+      inventory.giveItem(tempItem, itemQty);
     }
     else if (command == "DISCARD"){
-      // TODO
       string inventorySlot;
       int itemQty;
       inventory.discardItem(inventorySlot, itemQty);
@@ -49,30 +51,36 @@ int main(){
       int slotQty;
       string slotDest;
       cin >> slotSrc >> slotQty >> slotDest;
-      // TODO: need to parse slotDest for multiple destinations.
-      // TODO
+
+      if (slotSrc[0] == 'I' && slotDest[0] == 'C'){
+        // Case inven to crafting
+      } else if (slotSrc[0] == 'I' && slotDest[0] == 'I'){
+        // Case inven to inven
+      } else if (slotSrc[0] == 'C' && slotDest[0] == 'I'){
+        // case crafting to inven
+      }
+
+      // TODO: bedanya
     }
     else if (command == "USE"){
       string inventorySlot;
       cin >> inventorySlot;
-      // TODO
+      // TODO: Getter inventoryslot return item?
     }
     else if (command == "CRAFT"){
-      // TODO
+      table.craft(config);
     }
     else if (command == "EXPORT"){
       string outputPath;
       cout << "Enter your desired export filename: ";
       cin >> outputPath;
       outputPath = "./output/" + outputPath;
-      // TODO
+      inventory.exportInventory(outputPath);
     }
     else if (command == "HELP"){
-      // TODO
       config.printHelp();
     }
     else if (command == "QUIT"){
-      // TODO
       return 0;
     }
     else{

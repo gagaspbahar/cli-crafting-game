@@ -16,9 +16,6 @@ Item::Item(int id, string name, string category){
     this->id = id;
 }
 
-Item::Item(string name){
-
-}
 
 Item::Item(const Item& i){
     this->id = i.id;

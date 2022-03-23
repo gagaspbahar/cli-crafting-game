@@ -14,7 +14,6 @@ public :
 	// CONSTRUCTOR
     Item();
     Item(int, string, string);
-    Item(string id);
     Item(const Item&);
     
     // DESTRUCTOR
