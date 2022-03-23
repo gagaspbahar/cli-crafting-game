@@ -38,6 +38,7 @@ class Config {
     string getCategoryFromID(int id);
     int getIDFromName(string name);
     vector<ItemConfig> getItemList();
+    static string* stringParse(string s);
 };
 
 

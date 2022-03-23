@@ -106,3 +106,20 @@ void Config::printHelp(){
   cout << "HELP : Menunjukkan menu bantuan untuk command-command." << endl;
   cout << "EXIT : Keluar dari program." << endl;
 }
+
+string* Config::stringParse(string s){
+  string ans[10] = {};
+  int i = 0;
+  for(auto x : s){
+    string word = "";
+    if (x == ' ')
+        {
+            ans[i] = word;
+            i++;
+            word = "";
+        }
+        else {
+            word = word + x;
+        }
+  }
+}

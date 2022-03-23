@@ -54,13 +54,16 @@ int main(){
 
       if (slotSrc[0] == 'I' && slotDest[0] == 'C'){
         // Case inven to crafting
+        string* stringArray = Config::stringParse(slotDest);
+        inventory.moveToCrafting(slotSrc, slotQty, stringArray, table);
       } else if (slotSrc[0] == 'I' && slotDest[0] == 'I'){
         // Case inven to inven
+        inventory.moveItem(slotSrc, slotDest);
       } else if (slotSrc[0] == 'C' && slotDest[0] == 'I'){
         // case crafting to inven
+        // TODO
       }
 
-      // TODO: bedanya
     }
     else if (command == "USE"){
       string inventorySlot;
