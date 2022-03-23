@@ -69,9 +69,11 @@ int main(){
     }
     else if (command == "HELP"){
       // TODO
+      
     }
     else if (command == "QUIT"){
       // TODO
+      return 0;
     }
     else{
       cout << "Invalid command! Please try again." << endl;

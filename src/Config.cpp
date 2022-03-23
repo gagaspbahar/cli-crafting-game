@@ -103,4 +103,6 @@ void Config::printHelp(){
   cout << "USE <INVENTORY_SLOT_ID> : Menggunakan item tool" << endl;
   cout << "CRAFT : Memulai crafting dengan item yang sudah ada pada crafting table" << endl;
   cout << "EXPORT <NAMA_FILE> : Mengexport isi inventory ke file argumen." << endl;
+  cout << "HELP : Menunjukkan menu bantuan untuk command-command." << endl;
+  cout << "EXIT : Keluar dari program." << endl;
 }
