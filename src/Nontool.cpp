@@ -28,16 +28,15 @@ string NonTool::getType() const{
 
 // SETTER
 void NonTool::setQty(int qty){
-    this->quantity = qty;
+    if (qty <= 64){
+        this->quantity = qty;
+    } else {
+        this->quantity = 64;
+    }
 }
 
 void NonTool::setType(string type){
     this->type = type;
-}
-
-// USE
-void NonTool::use(){
-    this->quantity--;
 }
 
 // OPERATOR OVERLOADING
@@ -47,7 +46,11 @@ ostream & operator <<(ostream& os, const NonTool& nt){
 
 Item& NonTool::operator +=(int qty){
     int newQty = this->getQty() + qty;
-    this->setQty(newQty);
+    if (newQty <= 64){
+        this->setQty(newQty);
+    } else {
+        this->setQty(64);
+    }
 }
 
 Item& NonTool::operator -=(int qty){

@@ -1,7 +1,7 @@
 #ifndef NONTOOL_HPP
 #define NONTOOL_HPP
 
-#include <bits/stdc++.h>
+#include <string>
 #include <iostream>
 #include "Item.hpp"
 using namespace std;
@@ -25,9 +25,6 @@ public :
     // SETTER
     void setQty(int);
     void setType(string);
-    
-    // USE
-    void use();
     
     // OPERATOR OVERLOADING
     friend ostream & operator <<(ostream&, const NonTool&);
