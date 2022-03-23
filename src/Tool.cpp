@@ -8,12 +8,10 @@ Tool::Tool() : Item(){
 }
 
 Tool::Tool(int id, string name, int durability) : Item(id, name, "Tool"){
-    this->type = type;
     this->durability = durability ;
 }
 
 Tool::Tool(int id, string name) : Item(id, name, "Tool"){
-    this->type = type;
     this->durability = 10 ;
 }
 
