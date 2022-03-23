@@ -20,7 +20,8 @@ class CraftingTable {
         void setItem(Item*, int, int);
         void delItem(int,int);
         CraftingTable mirrorTable();
-        vector<string> getNonToolOnTable();
+        vector<string> getTypeOnTable();
+        vector<string> getNameOnTable();
         vector<Item*> getToolOnTable();
         bool isAllTool();
         bool isAllNonTool();

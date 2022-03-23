@@ -51,7 +51,7 @@ CraftingTable CraftingTable::mirrorTable() {
 	return CraftingTable(mTable);
 }
 
-vector<string> CraftingTable::getNonToolOnTable() {
+vector<string> CraftingTable::getTypeOnTable() {
 	/* I.S. : Crafting Table terdefinisi */
 	/* F.S. : Mengembalikan vector<string> yang berisi nama item yang ada di table */
 	vector<string> itemOnTable;
@@ -64,6 +64,21 @@ vector<string> CraftingTable::getNonToolOnTable() {
 				else{
 					itemOnTable.push_back(this->table[i][j]->getType());
 				}
+			}
+		}
+	}
+	sort(itemOnTable.begin(), itemOnTable.end());
+	return itemOnTable;
+}
+
+vector<string> CraftingTable::getNameOnTable() {
+	/* I.S. : Crafting Table terdefinisi */
+	/* F.S. : Mengembalikan vector<string> yang berisi nama item yang ada di table */
+	vector<string> itemOnTable;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (this->table[i][j]->getId() != 0) {
+				itemOnTable.push_back(this->table[i][j]->getName());
 			}
 		}
 	}
@@ -140,19 +155,21 @@ bool CraftingTable::isCompositionValid(Config config, string name) {
 	/* I.S. : Config terdefinisi, name terdefinisi */
 	/* F.S. : Mengembalikan true jika jumlah dan jenis bahan yang dibutuhkan untuk membuat item tersebut sesuai dengan resep*/
 	vector<string> ingredients = config.getRecipe().getRecipeComponents(name);
-	vector<string> itemOnTable = getNonToolOnTable();
+	vector<string> typeOnTable = getTypeOnTable();
+	vector<string> nameOnTable = getNameOnTable();
 	
-	if (itemOnTable.size() < ingredients.size()) {
+	if (typeOnTable.size() < ingredients.size()) {
 		return false;
 	}
 
 	// Check by name
-	bool status = true;
-	for(int i = 0 ; i < ingredients.size() && status ; i++){
-		status = ingredients[i] == itemOnTable[i];
+	bool statusName = true, statusType = true;
+	for(int i = 0 ; i < ingredients.size() && (statusName || statusType) ; i++){
+		statusName = ingredients[i] == nameOnTable[i];
+		statusType = ingredients[i] == typeOnTable[i];
 	}
 
-	return status;
+	return statusName || statusType;
 }
 
 bool CraftingTable::isPatternValid(Config config, string item){
