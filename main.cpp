@@ -69,7 +69,7 @@ int main(){
     }
     else if (command == "HELP"){
       // TODO
-      
+      config.printHelp();
     }
     else if (command == "QUIT"){
       // TODO
