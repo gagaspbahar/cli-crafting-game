@@ -20,13 +20,17 @@ int main(){
   config.getItemFromText();
   config.getRecipesFromText();
 
+  Inventory inventory;
+
+  CraftingTable table;
+
   cout << "Done!\n" << endl;
   cout << "What do you want to do?" << endl;
 
   string command;
   while(cin >> command){
     if(command == "SHOW"){
-      // TODO
+      inventory.showInventory();
     }
     else if (command == "GIVE"){
       string itemName;
@@ -36,6 +40,9 @@ int main(){
     }
     else if (command == "DISCARD"){
       // TODO
+      string inventorySlot;
+      int itemQty;
+      inventory.discardItem(inventorySlot, itemQty);
     }
     else if (command == "MOVE"){
       string slotSrc;
@@ -46,7 +53,7 @@ int main(){
       // TODO
     }
     else if (command == "USE"){
-      int inventorySlot;
+      string inventorySlot;
       cin >> inventorySlot;
       // TODO
     }
@@ -55,7 +62,9 @@ int main(){
     }
     else if (command == "EXPORT"){
       string outputPath;
+      cout << "Enter your desired export filename: ";
       cin >> outputPath;
+      outputPath = "./output/" + outputPath;
       // TODO
     }
     else if (command == "HELP"){

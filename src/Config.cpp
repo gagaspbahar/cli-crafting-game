@@ -79,10 +79,28 @@ string Config::getCategoryFromID(int id) {
   return "notfound";
 }
 
+int Config::getIDFromName(string name) {
+  for (auto i = this->itemList.begin(); i != itemList.end(); i++) {
+    if (i->name == name) {
+      return i->id;
+    }
+  }
+  return -1;
+}
+
 vector<ItemConfig> Config::getItemList() {
   return this->itemList;
 }
 
 void Config::printHelp(){
-  
+  cout << "============== HELP ==============" << endl;
+  cout << "SHOW : Menampilkan isi slot crafting dan inventory" << endl;
+  cout << "GIVE <ITEM_NAME> <ITEM_QTY> : Menambahkan item sebanyak item_qty ke inventory" << endl;
+  cout << "DISCARD <INVENTORY_SLOT_ID> <ITEM_QTY> : Membuang item di slot inventory dengan kuantitas yang diberikan." << endl;
+  cout << "MOVE <INVENTORY_SLOT_ID> N <CRAFTING_SLOT_ID_1> ... : Memindahkan item ke slot crafting." << endl;
+  cout << "MOVE <INVENTORY_SLOT_ID_SRC> 1 <INVENTORY_SLOT_ID_DEST> : Memindahkan atau menumpuk item non tool." << endl;
+  cout << "MOVE <CRAFTING_SLOT_ID> 1 <INVENTORY_SLOT_ID> : Mengembalikan item dari slot crafting ke inventory" << endl;
+  cout << "USE <INVENTORY_SLOT_ID> : Menggunakan item tool" << endl;
+  cout << "CRAFT : Memulai crafting dengan item yang sudah ada pada crafting table" << endl;
+  cout << "EXPORT <NAMA_FILE> : Mengexport isi inventory ke file argumen." << endl;
 }

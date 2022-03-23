@@ -1,4 +1,5 @@
 #include "../header/Item.hpp"
+#include "../header/Config.hpp"
 #include <iostream>
 using namespace std;
 
@@ -13,6 +14,10 @@ Item::Item(int id, string name, string category){
     this->name = name;
     this->category = category; // Tool or NonTool
     this->id = id;
+}
+
+Item::Item(string name){
+
 }
 
 Item::Item(const Item& i){
