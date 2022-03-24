@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include "Item.hpp"
 #include "Tool.hpp"
 #include "Nontool.hpp"
@@ -11,13 +12,13 @@ using namespace std;
 
 class SlotInventory {
     protected:
-        Item* slotContainer;
+        Item* item;
         const int capacity = 64;
         int quantity;
         int slotId;
     public:
         SlotInventory();
-        SlotInventory(Item* slotContainer, int quantity, int slotId);
+        SlotInventory(Item* item, int quantity, int slotId);
         SlotInventory(const SlotInventory& si);
         SlotInventory& operator=(const SlotInventory& si);
         virtual ~SlotInventory();

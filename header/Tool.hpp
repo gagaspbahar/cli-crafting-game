@@ -28,11 +28,13 @@ public :
     
     // USE
     void use();
+    // bool isTool();
     
     // OPERATOR OVERLOADING
     friend ostream & operator <<(ostream&, const Tool&);
-    Item& operator +=(int);
-    Item& operator -=(int);
+    Tool& operator=(const Tool& tool);
+    // Tool& operator +=(int);
+    // Tool& operator -=(int);
 };
 
 //(derivation from Tool -> Pickaxe, Axe, Sword)

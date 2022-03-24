@@ -4,9 +4,13 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <cmath>
 #include "SlotInventory.hpp"
 #include "InventoryException.hpp"
 #include "CraftingTable.hpp"
+#define ROW 3
+#define COL 9
+
 using namespace std;
 
 int convertIdToInt(string id);
@@ -16,34 +20,37 @@ int getRowCraft(int integer);
 
 class Inventory {
     protected:
-        vector<vector<SlotInventory*>> inventoryContainer;
-        const int sizeRow = 3;
-        const int sizeCol = 9;
-        int quantity;
+        Item* buffer[ROW][COL];
     public:
         Inventory();
-        Inventory(const Inventory& inventory);
+        //Inventory(const Inventory& inventory);
         Inventory& operator=(const Inventory& inventory);
-        virtual ~Inventory();
+        ~Inventory();
 
         // Getter
-        SlotInventory* getSlotInventory(string id);
+        Item* getItemFromSlot(string id);
 
         // Give & Discard
-        bool containItem(Item* item);
+        bool containSpecificItem(Item* item, int row, int col);
+        int givePossibleSlot(Item* item);
         void giveItem(Item* item, int quantity);
-        void discardItem(string id, int quantity);
+        void discardItem(string slot_id, int quantity);
 
         // Move
-        void moveItem(string idSrc, string idDest);
-        void moveToCrafting(string slotIdInventory, int N, string* slotIdCrafting, CraftingTable table);
-        void moveToInventory(CraftingTable table, string slotIdCrafting, string slotIdInventory);
+        void invToInv(string idSrc, string idDest);
+        
+        void invToCrafting(string slotIdInventory, int N, vector<string> slotIdCrafting, CraftingTable* table);
+        void singleInvToCrafting(string slotIdInventory, string slotIdCrafting, CraftingTable* table);
+
+        void craftingToInv(CraftingTable* table, string slotIdCrafting, string slotIdInventory);
        
         // Show
         void showInventory();
 
         // Export
         void exportInventory(string outputPath);
+
+        bool isSlotIdValid(int id);
 
 };
 

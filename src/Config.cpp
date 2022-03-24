@@ -64,7 +64,7 @@ string Config::getNameFromID(int id) {
 string Config::getTypeFromID(int id) {
   for (auto i = this->itemList.begin(); i != itemList.end(); i++) {
     if (i->id == id) {
-      return i->parentClass;;
+      return i->parentClass;
     }
   }
   return "notfound";
@@ -107,18 +107,22 @@ void Config::printHelp(){
   cout << "EXIT : Keluar dari program." << endl;
 }
 
-void Config::stringParse(string s, string* ans){
+vector<string> Config::stringParse(string s){
+  vector <string> ans;
   int i = 0;
+  string word = "";
   for(auto x : s){
-    string word = "";
-    if (x == ' ')
-        {
-            ans[i] = word;
-            i++;
-            word = "";
-        }
-        else {
-            word = word + x;
-        }
+    if (x == ' ' )
+    {
+      ans.push_back(word);
+      i++;
+      word = "";
+    }
+    else {
+      word = word + x;
+    }
   }
+  ans.push_back(word);
+  cout << "SIZZE COK" << ans.size() << endl;
+  return ans;
 }

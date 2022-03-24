@@ -62,6 +62,10 @@ void Item::setQty(int i){
     
 }
 
+// bool Item::isTool(){
+//     return false;
+// }
+
 // OPERATOR ASSIGNMENT
 Item& Item::operator=(const Item& item){
     this->name = item.name;
@@ -75,13 +79,13 @@ bool operator==(const Item& i1, const Item& i2) {
     return ((i1.getId() == i2.getId()) && (i1.getName() == i2.getName()) && (i1.getCategory() == i2.getCategory()));
 }
 
-Item& Item::operator +=(int){
-    return *this;
-}
+// Item& Item::operator +=(int){
+//     return *this;
+// }
 
-Item& Item::operator -=(int){
-    return *this;
-}
+// Item& Item::operator -=(int){
+//     return *this;
+// }
 
 // USE FUNCTION
 void Item::use(){

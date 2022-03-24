@@ -244,10 +244,10 @@ Item* CraftingTable::craft(Config config){
 
 void CraftingTable::printTable() {
     // Get Max ItemName length
-	int mw = 0;
+	int mw = 3; // c/: C 8
 	for(int i = 0 ; i < 3; i++){
 		for(int j = 0 ; j < 3 ;j++){
-			int tempLength = this->table[i][j]->getName().length();
+			int tempLength = this->table[i][j]->getName().length() + 2;
 			if (tempLength > mw){
 				mw = tempLength;
 			}
@@ -259,20 +259,44 @@ void CraftingTable::printTable() {
 		cout << "-";
 	}
 	cout << endl;
+	int slotId = 0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			int ws = this->table[i][j]->getName().length();
+			// Kasus Slot Kosong
+			int ws;
 			cout << "|";
-			for(int space = 0 ; space < (mw - ws)/2 ; space++){
-				cout << " ";
-			} 
-			cout << this->table[i][j]->getName();
-			for(int space = 0 ; space < (mw - ws)/2 + (ws%2 != 0); space++){
-				cout << " ";
-			} 
+			if (this->table[i][j]->getId() == 0){
+				ws = 3;
+                for(int space = 0 ; space < (mw - ws)/2 ; space++){
+                    cout << " ";
+                }
+                cout << "C " << slotId;
+                for(int space = 0 ; space < (mw - ws)/2 + (ws%2 != 0); space++){
+                    cout << " ";
+                }
+			}
+			// Kasus Slot Tidak Kosong
+			else {
+				ws = this->table[i][j]->getName().length();
+				for(int space = 0 ; space < (mw - ws)/2 ; space++){
+					cout << " ";
+				} 
+				cout << this->table[i][j]->getName() << " ";
+				if (this->table[i][j]->getCategory() == "NONTOOL"){
+                    cout << this->table[i][j]->getQty();
+                } 
+                // Kasus Tool (print quantity)
+                else {
+                    cout << this->table[i][j]->getDura();
+                }
+				for(int space = 0 ; space < (mw - ws)/2 + (ws%2 != 0); space++){
+					cout << " ";
+				} 
+			}
+			slotId++;
 		}
 		cout << "|" << endl;
-		for(int line = 0 ; line < mw*3+4 ; line++){
+		for(int line = 0 ; line < mw*3 + 4 ; line++){
 			cout << "-";
 		}
 		cout << endl;
