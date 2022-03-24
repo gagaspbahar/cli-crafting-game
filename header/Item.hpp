@@ -38,12 +38,12 @@ public :
     Item& operator=(const Item& item);
     
     // OPERATOR OVERLOADING
-    virtual Item& operator +=(int) = 0;
-    virtual Item& operator -=(int) = 0;
+    virtual Item& operator +=(int);
+    virtual Item& operator -=(int);
     friend bool operator==(const Item&, const Item&);
     
     // USE FUNCTION
-    virtual void use() = 0;
+    virtual void use();
 
     // FOR DYNAMIC CASTING
     template<typename T>

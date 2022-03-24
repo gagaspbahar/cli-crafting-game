@@ -66,3 +66,16 @@ Item& Item::operator=(const Item& item){
 bool operator==(const Item& i1, const Item& i2) {
     return ((i1.getId() == i2.getId()) && (i1.getName() == i2.getName()) && (i1.getCategory() == i2.getCategory()));
 }
+
+Item& Item::operator +=(int){
+
+}
+
+Item& Item::operator -=(int){
+
+}
+
+// USE FUNCTION
+void Item::use(){
+    
+}

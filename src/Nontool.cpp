@@ -46,6 +46,7 @@ void NonTool::use(){
 // OPERATOR OVERLOADING
 ostream & operator <<(ostream& os, const NonTool& nt){
     os << "[" << nt.getId() << " " << nt.getQty() << "]";
+    return os;
 }
 
 Item& NonTool::operator +=(int qty){
@@ -55,10 +56,12 @@ Item& NonTool::operator +=(int qty){
     } else {
         this->setQty(64);
     }
+    return *this;
 }
 
 Item& NonTool::operator -=(int qty){
     int newQty = this->getQty() - qty;
     if (newQty < 0) newQty = 0;
     this->setQty(newQty);
+    return *this;
 }

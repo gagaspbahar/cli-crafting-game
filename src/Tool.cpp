@@ -38,15 +38,18 @@ void Tool::use(){
 // OPERATOR OVERLOADING
 ostream & operator <<(ostream& os, const Tool& nt){
     os << "[" << nt.getId() << " " << nt.getDura() << "]";
+    return os;
 }
 
 Item& Tool::operator +=(int Dura){
     int newDura = this->getDura() + Dura;
     this->setDura(newDura);
+    return *this;
 }
 
 Item& Tool::operator -=(int Dura){
     int newDura = this->getDura() - Dura;
     if (newDura < 0) newDura = 0;
     this->setDura(newDura);
+    return *this;
 }
