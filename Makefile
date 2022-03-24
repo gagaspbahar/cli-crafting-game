@@ -23,7 +23,8 @@ check: FORCE check.cpp
 	g++ -std=c++17 -o check check.cpp
 	./check
 
-FORCE: ;
+compiletest:
+	g++ -std=c++17 -o main main.cpp src/Config.cpp src/CraftingTable.cpp src/Inventory.cpp src/Item.cpp src/Nontool.cpp src/Recipe.cpp src/SlotInventory.cpp src/Tool.cpp
+	./main
 
-testmain:
-	g++ testmain.cpp -o testmain && ./testmain
+FORCE: ;

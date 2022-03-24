@@ -68,11 +68,11 @@ bool operator==(const Item& i1, const Item& i2) {
 }
 
 Item& Item::operator +=(int){
-
+    return *this;
 }
 
 Item& Item::operator -=(int){
-
+    return *this;
 }
 
 // USE FUNCTION

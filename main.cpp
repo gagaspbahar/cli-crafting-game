@@ -22,7 +22,7 @@ int main(){
 
   Inventory inventory;
 
-  CraftingTable table;
+  CraftingTable* table = new CraftingTable();
 
   cout << "Done!\n" << endl;
   cout << "What do you want to do?" << endl;
@@ -54,14 +54,15 @@ int main(){
 
       if (slotSrc[0] == 'I' && slotDest[0] == 'C'){
         // Case inven to crafting
-        string* stringArray = Config::stringParse(slotDest);
-        inventory.moveToCrafting(slotSrc, slotQty, stringArray, table);
+        string stringArray[10] = {0};
+        Config::stringParse(slotDest, stringArray);
+        inventory.moveToCrafting(slotSrc, slotQty, stringArray, *table);
       } else if (slotSrc[0] == 'I' && slotDest[0] == 'I'){
         // Case inven to inven
         inventory.moveItem(slotSrc, slotDest);
       } else if (slotSrc[0] == 'C' && slotDest[0] == 'I'){
         // case crafting to inven
-        // TODO
+        table->moveToInventory(inventory, slotSrc, slotDest);
       }
 
     }
@@ -71,7 +72,7 @@ int main(){
       // TODO: Getter inventoryslot return item?
     }
     else if (command == "CRAFT"){
-      table.craft(config);
+      table->craft(config);
     }
     else if (command == "EXPORT"){
       string outputPath;

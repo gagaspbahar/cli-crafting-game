@@ -107,8 +107,7 @@ void Config::printHelp(){
   cout << "EXIT : Keluar dari program." << endl;
 }
 
-string* Config::stringParse(string s){
-  string ans[10] = {};
+void Config::stringParse(string s, string* ans){
   int i = 0;
   for(auto x : s){
     string word = "";
