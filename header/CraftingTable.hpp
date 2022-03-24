@@ -6,7 +6,6 @@
 #include "Item.hpp"
 #include "Tool.hpp"
 #include "Nontool.hpp"
-#include "InventoryException.hpp"
 
 int getRowCraft(int integer);
 int getColCraft(int integer);

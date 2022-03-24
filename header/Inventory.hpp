@@ -5,8 +5,7 @@
 #include <ostream>
 #include <string>
 #include <cmath>
-#include "SlotInventory.hpp"
-#include "InventoryException.hpp"
+#include "Exception.hpp"
 #include "CraftingTable.hpp"
 #define ROW 3
 #define COL 9

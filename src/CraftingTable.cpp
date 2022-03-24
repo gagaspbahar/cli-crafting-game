@@ -99,7 +99,7 @@ bool CraftingTable::isAllTool(){
 	bool status = true;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if(this->table[i][j]->getId() != 0 && this->table[i][j]->getCategory() != "Tool"){
+			if(this->table[i][j]->getId() != 0 && this->table[i][j]->getCategory() != "TOOL"){
 				status = false;
 				return status;
 			}
@@ -112,7 +112,7 @@ bool CraftingTable::isAllNonTool(){
 	bool status = true;
 	for (int i = 0; i < 3 && status; i++) {
 		for (int j = 0; j < 3 && status; j++) {
-			status = (this->table[i][j]->getId() == 0) || (this->table[i][j]->getCategory() == "NonTool");
+			status = (this->table[i][j]->getId() == 0) || (this->table[i][j]->getCategory() == "NONTOOL");
 		}
 	}
 	return status;
@@ -167,6 +167,7 @@ bool CraftingTable::isCompositionValid(Config config, string name) {
 	return statusName || statusType;
 }
 
+// TODO
 bool CraftingTable::isPatternValid(Config config, string item){
 	/* I.S. : Config terdefinisi, item terdefinisi */
 	/* F.S. : Mengembalikan true jika pattern yang dibutuhkan untuk membuat item tersebut sesuai dengan resep*/
@@ -196,6 +197,7 @@ bool CraftingTable::isPatternValid(Config config, string item){
 }
 
 Item* CraftingTable::craft(Config config){
+	cout << "fungsi" << endl;
 	if(isAllTool() && isTwoTool()){
 		vector<Item*> itemOnTable = getToolOnTable();
 		int newDura = itemOnTable[0]->getDura() + itemOnTable[1]->getDura();
@@ -208,8 +210,11 @@ Item* CraftingTable::craft(Config config){
 	if(this->isAllNonTool()){
 		Recipe recipe = config.getRecipe();
 		for (int i=0; i< config.getItemList().size(); i++){
+			cout << i << endl;
 			if(isCompositionValid(config, config.getItemList()[i].name)){
+				cout << "comp" << endl;
 				if(isPatternValid(config, config.getItemList()[i].name)){
+					cout << "pattern" << endl;
 					// NGUMPULIN QTY BAHAN2 DI MEJA DIAMOND SWORD [ DIAMOND 2 , DIAMOND 2 , KAYU 1]
 					// [ DIAMOND 1 , DIAMOND 1 , KAYU 1] -> min(2/1, 2/1, 1/1)
 					int count = 64;
@@ -239,6 +244,7 @@ Item* CraftingTable::craft(Config config){
 			}
 		}
 	}
+	cout << "gamasuk apa apa jir" << endl;
 	return new NonTool();
 }
 

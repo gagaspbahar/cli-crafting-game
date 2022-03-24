@@ -3,11 +3,9 @@
 #include "./header/CraftingTable.hpp"
 #include "./header/Exception.hpp"
 #include "./header/Inventory.hpp"
-#include "./header/InventoryException.hpp"
 #include "./header/Item.hpp"
 #include "./header/Nontool.hpp"
 #include "./header/Recipe.hpp"
-#include "./header/SlotInventory.hpp"
 #include "./header/Tool.hpp"
 
 using namespace std;
@@ -101,7 +99,8 @@ int main(){
       }
     }
     else if (command == "CRAFT"){
-      inventory.giveItem(table.craft(config), table.craft(config)->getQty());
+      Item* tempItem = table.craft(config);
+      inventory.giveItem(tempItem, tempItem->getQty());
     }
     else if (command == "EXPORT"){
       string outputPath;

@@ -89,48 +89,57 @@ int Inventory::givePossibleSlot(Item* item){
 }
 
 void Inventory::giveItem(Item* item, int q){
-    // Check available slot
-    int slot = givePossibleSlot(item);
-    int slotRow;
-    int slotCol;
-    int quantity = q;
-    if(quantity == 0){
-      // do nothing
-    }
-    else{
-      while(quantity > 0 && slot != -1){
-        slotRow = getRowInv(slot);
-        slotCol = getColInv(slot);
-        if(this->buffer[slotRow][slotCol]->getId() == 0){
-            //NONTOOL KOTAK KOSONG
-            if(item->getCategory() == "NONTOOL"){
-                if(quantity < 64){
-                    this->buffer[slotRow][slotCol] = new NonTool(item->getId() , item->getName(), item->getType() , quantity);
-                    quantity = 0;
-                }
-                else{
-                    this->buffer[slotRow][slotCol] = new NonTool(item->getId() , item->getName(), item->getType() , 64);
-                    quantity -= 64;
-                }
-            }
-            //TOOL KOTAK KOSONG
-            else{
-                this->buffer[slotRow][slotCol] = new Tool(item->getId() , item->getName(), 10);
-                quantity -=1;
-            }
+    try{
+        // Check available slot
+        int slot = givePossibleSlot(item);
+        int slotRow;
+        int slotCol;
+        int quantity = q;
+        if(quantity == 0){
+            throw GiveZeroItemException();
         }
-        
-        // BUKAN KOTAK KOSONG (HANYA MUNGKIN NONTOOL)
         else{
-            int currQty = this->buffer[slotRow][slotCol]->getQty();
-            int toAdd = (quantity + currQty > 64 ? 64 - currQty : quantity);
-            this->buffer[slotRow][slotCol]->setQty(currQty+toAdd);
-            quantity -= toAdd;
-        }
+            while(quantity > 0 && slot != -1){
+                slotRow = getRowInv(slot);
+                slotCol = getColInv(slot);
+                if(this->buffer[slotRow][slotCol]->getId() == 0){
+                    //NONTOOL KOTAK KOSONG
+                    if(item->getCategory() == "NONTOOL"){
+                        if(quantity < 64){
+                            this->buffer[slotRow][slotCol] = new NonTool(item->getId() , item->getName(), item->getType() , quantity);
+                            quantity = 0;
+                        }
+                        else{
+                            this->buffer[slotRow][slotCol] = new NonTool(item->getId() , item->getName(), item->getType() , 64);
+                            quantity -= 64;
+                        }
+                    }
+                    //TOOL KOTAK KOSONG
+                    else{
+                        this->buffer[slotRow][slotCol] = new Tool(item->getId() , item->getName(), 10);
+                        quantity -=1;
+                    }
+                }
+                
+                // BUKAN KOTAK KOSONG (HANYA MUNGKIN NONTOOL)
+                else{
+                    int currQty = this->buffer[slotRow][slotCol]->getQty();
+                    int toAdd = (quantity + currQty > 64 ? 64 - currQty : quantity);
+                    this->buffer[slotRow][slotCol]->setQty(currQty+toAdd);
+                    quantity -= toAdd;
+                }
 
-        //check next slot possibility
-        slot = givePossibleSlot(item);
-      }
+                //check next slot possibility
+                slot = givePossibleSlot(item);
+                if (slot == -1) {
+                    throw FullException();
+                }
+            }
+        }
+    }
+    catch (BaseException& e)
+    {
+        e.printMessage();
     }
 }
 
@@ -165,97 +174,106 @@ void Inventory::invToInv(string idSrc, string idDest){
     // hilang / habis), jika memungkinkan.
     // 2. Jumlah Jumlah Item pada INVENTORY_SLOT_ID_DEST sebanyak Qty1
     // + Qty2, namun maksimal sebanyak 64
-  
-  int srcSlot = convertIdToInt(idSrc);
-  int destSlot = convertIdToInt(idDest);
-  
-  if(!isSlotIdValid(srcSlot) || !isSlotIdValid(destSlot)){
-    cout << "Invalid slot input." << endl;
-    cout << srcSlot << destSlot << endl;
-    return;
-  }
+  try{ 
+    int srcSlot = convertIdToInt(idSrc);
+    int destSlot = convertIdToInt(idDest);
+    
+    if(!isSlotIdValid(srcSlot) || !isSlotIdValid(destSlot)){
+        throw ItemSlotInvalid();
+    }
 
-  int srcSlotRow = getRowInv(srcSlot);
-  int srcSlotCol = getColInv(srcSlot);
+    int srcSlotRow = getRowInv(srcSlot);
+    int srcSlotCol = getColInv(srcSlot);
 
-  int destSlotRow = getRowInv(destSlot);
-  int destSlotCol = getColInv(destSlot);
-  
+    int destSlotRow = getRowInv(destSlot);
+    int destSlotCol = getColInv(destSlot);
+    
 
-  // DARI KOSONG -> DO NOTHING
-  if(this->buffer[srcSlotRow][srcSlotCol]->getId() == 0){
-    // do nothing
-  }
-  // ISI KE KOSONG -> PINDAHIN
-  else if(this->buffer[destSlotRow][destSlotCol]->getId() == 0){
-      this->buffer[destSlotRow][destSlotCol] = this->buffer[srcSlotRow][srcSlotCol];
-      this->buffer[srcSlotRow][srcSlotCol] = new NonTool();
-  }
-  else{
-    bool idNonToolSama = this->buffer[srcSlotRow][srcSlotCol]->getId() == this->buffer[destSlotRow][destSlotCol]->getId() && this->buffer[srcSlotRow][srcSlotCol]->getCategory() == "NONTOOL";
-
-    if(idNonToolSama){
-      // ISI KE ISI DAN SAMA JENIS ITEM (NON TOOL) DAN CUKUP -> TUMPUK
-      if(this->buffer[srcSlotRow][srcSlotCol]->getQty() + this->buffer[destSlotRow][destSlotCol]->getQty() <= 64){
-        // new qty in dest
-        this->buffer[destSlotRow][destSlotCol]->setQty(this->buffer[destSlotRow][destSlotCol]->getQty() + this->buffer[srcSlotRow][srcSlotCol]->getQty());
-        // delete src
+    // DARI KOSONG -> DO NOTHING
+    if(this->buffer[srcSlotRow][srcSlotCol]->getId() == 0){
+        throw NoItemException();
+    }
+    // ISI KE KOSONG -> PINDAHIN
+    else if(this->buffer[destSlotRow][destSlotCol]->getId() == 0){
+        this->buffer[destSlotRow][destSlotCol] = this->buffer[srcSlotRow][srcSlotCol];
         this->buffer[srcSlotRow][srcSlotCol] = new NonTool();
-      }
-      // ISI KE ISI DAN GA CUKUP -> PINDAHIN SEBAGIAN
-      else{
-        // TIDAK CUKUP SLOT
-        // gaada delete src
-        this->buffer[srcSlotRow][srcSlotCol]->setQty(this->buffer[srcSlotRow][srcSlotCol]->getQty() - (64 - this->buffer[destSlotRow][destSlotCol]->getQty()));
-        this->buffer[destSlotRow][destSlotCol]->setQty(64);
-      }
     }
-
-    // ISI KE ISI DAN BEDA OR TOOL -> DO NOTHING
     else{
-      // Do nothing
+        bool idNonToolSama = this->buffer[srcSlotRow][srcSlotCol]->getId() == this->buffer[destSlotRow][destSlotCol]->getId() && this->buffer[srcSlotRow][srcSlotCol]->getCategory() == "NONTOOL";
+
+        if(idNonToolSama){
+            // ISI KE ISI DAN SAMA JENIS ITEM (NON TOOL) DAN CUKUP -> TUMPUK
+            if(this->buffer[srcSlotRow][srcSlotCol]->getQty() + this->buffer[destSlotRow][destSlotCol]->getQty() <= 64){
+                // new qty in dest
+                this->buffer[destSlotRow][destSlotCol]->setQty(this->buffer[destSlotRow][destSlotCol]->getQty() + this->buffer[srcSlotRow][srcSlotCol]->getQty());
+                // delete src
+                this->buffer[srcSlotRow][srcSlotCol] = new NonTool();
+            }
+            // ISI KE ISI DAN GA CUKUP -> PINDAHIN SEBAGIAN
+            else{
+                // TIDAK CUKUP SLOT
+                // gaada delete src
+                this->buffer[srcSlotRow][srcSlotCol]->setQty(this->buffer[srcSlotRow][srcSlotCol]->getQty() - (64 - this->buffer[destSlotRow][destSlotCol]->getQty()));
+                this->buffer[destSlotRow][destSlotCol]->setQty(64);
+            }
+        }
+
+        // ISI KE ISI DAN BEDA OR TOOL -> DO NOTHING
+        else{
+            throw DifferentItemException();
+        }
     }
   }
+    catch (BaseException& e)
+    {
+        e.printMessage();
+    }
 }
 
 void Inventory::singleInvToCrafting(string slotIdInventory, string slotIdCrafting, CraftingTable* table){
-    int idInv = convertIdToInt(slotIdInventory);
-    int rowInv = getRowInv(idInv) , colInv = getColInv(idInv);
+    try{
+        int idInv = convertIdToInt(slotIdInventory);
+        int rowInv = getRowInv(idInv) , colInv = getColInv(idInv);
 
-    int idCraft = convertIdToInt(slotIdCrafting);
-    int rowCraft = getRowCraft(idCraft) , colCraft = getColCraft(idCraft);
+        int idCraft = convertIdToInt(slotIdCrafting);
+        int rowCraft = getRowCraft(idCraft) , colCraft = getColCraft(idCraft);
 
-    // ISI KE KOSONG
-    if(table->getItem(rowCraft,colCraft)->getId() == 0){
-        if(this->buffer[rowInv][colInv]->getCategory() == "NONTOOL"){
-            Item* nontool = new NonTool(this->buffer[rowInv][colInv]->getId(), this->buffer[rowInv][colInv]->getName(), this->buffer[rowInv][colInv]->getType(), 1);
-            table->setItem(nontool, rowCraft, colCraft);
+        // ISI KE KOSONG
+        if(table->getItem(rowCraft,colCraft)->getId() == 0){
+            if(this->buffer[rowInv][colInv]->getCategory() == "NONTOOL"){
+                Item* nontool = new NonTool(this->buffer[rowInv][colInv]->getId(), this->buffer[rowInv][colInv]->getName(), this->buffer[rowInv][colInv]->getType(), 1);
+                table->setItem(nontool, rowCraft, colCraft);
+                discardItem(slotIdInventory,1);
+            }
+            else{
+            Item* tool = new Tool(this->buffer[rowInv][colInv]->getId(), this->buffer[rowInv][colInv]->getName(), this->buffer[rowInv][colInv]->getDura());
+            table->setItem(this->buffer[rowInv][colInv], rowCraft, colCraft);
             discardItem(slotIdInventory,1);
+            }
         }
+        // ISI KE ISI 
         else{
-          Item* tool = new Tool(this->buffer[rowInv][colInv]->getId(), this->buffer[rowInv][colInv]->getName(), this->buffer[rowInv][colInv]->getDura());
-          table->setItem(this->buffer[rowInv][colInv], rowCraft, colCraft);
-          discardItem(slotIdInventory,1);
+            // ISI KE ISI TAPI SALAH (BEDA) (TOLAK)
+            if(this->buffer[rowInv][colInv]->getId() != table->getItem(rowCraft,colCraft)->getId()){
+                throw sudahKeisiItemException(slotIdCrafting, table->getItem(rowCraft, colCraft)->getName());
+            }
+            // ISI KE ISI TAPI SAMA
+            else{
+                // NONTOOL TUMPUK
+                if(this->buffer[rowInv][colInv]->getCategory() == "NONTOOL"){
+                    table->getItem(rowCraft, colCraft)->setQty(table->getItem(rowCraft, colCraft)->getQty() + 1);
+                    discardItem(slotIdInventory,1);
+                }
+                // TOOL GAGAL
+                else{
+                    throw sudahKeisiItemException(slotIdCrafting, table->getItem(rowCraft, colCraft)->getName());
+                }  
+            }
         }
     }
-    // ISI KE ISI 
-    else{
-      // ISI KE ISI TAPI SALAH (BEDA) (TOLAK)
-      if(this->buffer[rowInv][colInv]->getId() != table->getItem(rowCraft,colCraft)->getId()){
-          cout << "Slot " << slotIdCrafting << " sudah terisi item " << table->getItem(rowCraft, colCraft)->getName() << endl;
-      }
-      // ISI KE ISI TAPI SAMA
-      else{
-        // NONTOOL TUMPUK
-        if(this->buffer[rowInv][colInv]->getCategory() == "NONTOOL"){
-            table->getItem(rowCraft, colCraft)->setQty(table->getItem(rowCraft, colCraft)->getQty() + 1);
-            discardItem(slotIdInventory,1);
-        }
-        // TOOL GAGAL
-        else{
-          cout << "Slot " << slotIdCrafting << " sudah terisi item Tool berupa " << table->getItem(rowCraft, colCraft)->getName() << endl;
-        }  
-      }
+    catch (BaseException& e)
+    {
+        e.printMessage();
     }
 }
 
@@ -270,38 +288,44 @@ void Inventory::invToCrafting(string slotIdInventory, int N, vector<string> slot
     // 1. Jumlah Item pada INVENTORY_SLOT_ID sebanyak Qty - N.
     // 2. CRAFTING_SLOT_ID_1 hingga N berisi Item yang sama dengan
     // INVENTORY_SLOT_ID dengan jumlah masing-masing 1
-    bool status = true;
-  
-    if(!isSlotIdValid(convertIdToInt(slotIdInventory))){
-      status = false;
-    //   cout << "1" << endl;
-    }
-
-    for(int i = 0; i < N && status; i++){
-        int idCraft = convertIdToInt(slotIdCrafting[i]);
-        status = idCraft >= 0 && idCraft <= 8;
-        // cout << "2" << endl;
-    }
-
-    if (status){
-        // cout << "3" << endl;
-        Item* currItem = this->buffer[getRowInv(convertIdToInt(slotIdInventory))][getColInv(convertIdToInt(slotIdInventory))];
-        if(currItem->getId() == 0){
-            // do nothing
-        } else{
-            int currItemCount = currItem->getQty();
-            // HANDLE LOOP
-            for(int i = 0; i < slotIdCrafting.size() && currItemCount != 0; i++){
-                // cout << table->getItem(0,1)->getId() << endl;
-                // cout << "4" << endl;
-                singleInvToCrafting(slotIdInventory, slotIdCrafting[i], table);
-                // cout << "in da loop" << i << endl;
-                currItemCount--;
-            }
+    try{
+        bool status = true;
+    
+        if(!isSlotIdValid(convertIdToInt(slotIdInventory))){
+        status = false;
+        //   cout << "1" << endl;
         }
-        
-    }else{
-      cout << "Invalid slot input." << endl;
+
+        for(int i = 0; i < N && status; i++){
+            int idCraft = convertIdToInt(slotIdCrafting[i]);
+            status = idCraft >= 0 && idCraft <= 8;
+            // cout << "2" << endl;
+        }
+
+        if (status){
+            // cout << "3" << endl;
+            Item* currItem = this->buffer[getRowInv(convertIdToInt(slotIdInventory))][getColInv(convertIdToInt(slotIdInventory))];
+            if(currItem->getId() == 0){
+                // do nothing
+            } else{
+                int currItemCount = currItem->getQty();
+                // HANDLE LOOP
+                for(int i = 0; i < slotIdCrafting.size() && currItemCount != 0; i++){
+                    // cout << table->getItem(0,1)->getId() << endl;
+                    // cout << "4" << endl;
+                    singleInvToCrafting(slotIdInventory, slotIdCrafting[i], table);
+                    // cout << "in da loop" << i << endl;
+                    currItemCount--;
+                }
+            }
+            
+        }else{
+            throw ItemSlotInvalid();
+        }
+    }   
+    catch (BaseException& e)
+    {
+        e.printMessage();
     }
 }
 
@@ -315,52 +339,24 @@ void Inventory::craftingToInv(CraftingTable* table, string slotIdCrafting, strin
 // F.S. : 
 // CRAFTING_SLOT_ID kosong.
 // Jumlah Item pada INVENTORY_SLOT_ID bertambah 1.
-    int idInv = convertIdToInt(slotIdInventory);
-    int rowInv = getRowInv(idInv) , colInv = getColInv(idInv);
+    try{
+        int idInv = convertIdToInt(slotIdInventory);
+        int rowInv = getRowInv(idInv) , colInv = getColInv(idInv);
 
-    int idCraft = convertIdToInt(slotIdCrafting);
-    int rowCraft = getRowCraft(idCraft) , colCraft = getColCraft(idCraft);  
-    
-    // DARI KOSONG
-    if(table->getItem(rowCraft, colCraft)->getId() == 0){
-        // do nothing
-    }
-    else{
-        // ISI KE KOSONG
-        if(this->buffer[rowInv][colInv]->getId() == 0){
-            if(table->getItem(rowCraft, colCraft)->getCategory() == "NONTOOL"){
-                Item* nontool = new NonTool(table->getItem(rowCraft, colCraft)->getId(), table->getItem(rowCraft, colCraft)->getName(), table->getItem(rowCraft, colCraft)->getType(), 1);
-                this->buffer[rowInv][colInv] = nontool;
-                
-                if(table->getItem(rowCraft, colCraft)->getQty() == 1){
-                    // erase
-                    table->setItem(new NonTool(), rowCraft, colCraft);
-                }
-                else{
-                    // kurangin satu
-                    table->getItem(rowCraft, colCraft)->setQty(table->getItem(rowCraft, colCraft)->getQty() - 1);
-                }
-            }
-            else{
-                
-                Item* tool = new Tool(table->getItem(rowCraft, colCraft)->getId(), table->getItem(rowCraft, colCraft)->getName(), table->getItem(rowCraft, colCraft)->getDura());
-                this->buffer[rowInv][colInv] = tool;
-                // erase on crafting
-                table->setItem(new NonTool(), rowCraft, colCraft);
-            }
+        int idCraft = convertIdToInt(slotIdCrafting);
+        int rowCraft = getRowCraft(idCraft) , colCraft = getColCraft(idCraft);  
+        
+        // DARI KOSONG
+        if(table->getItem(rowCraft, colCraft)->getId() == 0){
+            // do nothing
         }
-          
         else{
-          // ISI KE ISI TAPI BEDA
-          if(table->getItem(rowCraft,colCraft)->getId() != this->buffer[rowInv][colInv]->getId()){
-              cout << "Slot " << slotIdInventory << " sudah terisi item " << this->buffer[rowInv][colInv]->getName() << endl;
-          } // ISI KE ISI TAPI SAMA
-          else{
-            // NONTOOL
-              if(table->getItem(rowCraft, colCraft)->getCategory() == "NONTOOL"){
-              // JUMLAHNYA BELUM PENUH
-                if(this->buffer[rowInv][colInv]->getQty() <= 63){
-                    this->buffer[rowInv][colInv]->setQty(this->buffer[rowInv][colInv]->getQty() + 1);
+            // ISI KE KOSONG
+            if(this->buffer[rowInv][colInv]->getId() == 0){
+                if(table->getItem(rowCraft, colCraft)->getCategory() == "NONTOOL"){
+                    Item* nontool = new NonTool(table->getItem(rowCraft, colCraft)->getId(), table->getItem(rowCraft, colCraft)->getName(), table->getItem(rowCraft, colCraft)->getType(), 1);
+                    this->buffer[rowInv][colInv] = nontool;
+                    
                     if(table->getItem(rowCraft, colCraft)->getQty() == 1){
                         // erase
                         table->setItem(new NonTool(), rowCraft, colCraft);
@@ -370,18 +366,52 @@ void Inventory::craftingToInv(CraftingTable* table, string slotIdCrafting, strin
                         table->getItem(rowCraft, colCraft)->setQty(table->getItem(rowCraft, colCraft)->getQty() - 1);
                     }
                 }
-              // PENUH
-                else {
-                    cout << "Slot " << slotIdInventory << " sudah terisi penuh " << endl;
+                else{
+                    
+                    Item* tool = new Tool(table->getItem(rowCraft, colCraft)->getId(), table->getItem(rowCraft, colCraft)->getName(), table->getItem(rowCraft, colCraft)->getDura());
+                    this->buffer[rowInv][colInv] = tool;
+                    // erase on crafting
+                    table->setItem(new NonTool(), rowCraft, colCraft);
                 }
-                  
-              }
-            // TOOL -> GAGAL
-            else {
-                cout << "Slot " << slotIdInventory << " sudah terisi item Tool berupa " << this->buffer[rowInv][colInv]->getName() << endl;
             }
-          }
+            
+            else{
+                // ISI KE ISI TAPI BEDA
+                if(table->getItem(rowCraft,colCraft)->getId() != this->buffer[rowInv][colInv]->getId()){
+                    throw SlotKeisiException();
+                } // ISI KE ISI TAPI SAMA
+                else{
+                    // NONTOOL
+                    if(table->getItem(rowCraft, colCraft)->getCategory() == "NONTOOL"){
+                    // JUMLAHNYA BELUM PENUH
+                        if(this->buffer[rowInv][colInv]->getQty() <= 63){
+                            this->buffer[rowInv][colInv]->setQty(this->buffer[rowInv][colInv]->getQty() + 1);
+                            if(table->getItem(rowCraft, colCraft)->getQty() == 1){
+                                // erase
+                                table->setItem(new NonTool(), rowCraft, colCraft);
+                            }
+                            else{
+                                // kurangin satu
+                                table->getItem(rowCraft, colCraft)->setQty(table->getItem(rowCraft, colCraft)->getQty() - 1);
+                            }
+                        }
+                    // PENUH
+                        else {
+                            throw SlotPenuhException();
+                        }
+                        
+                    }
+                    // TOOL -> GAGAL
+                    else {
+                        throw SlotKeisiException();
+                    }
+                }
+            }
         }
+    }
+    catch (BaseException& e)
+    {
+        e.printMessage();
     }
 }
 
