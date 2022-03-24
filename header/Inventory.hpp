@@ -24,6 +24,9 @@ class Inventory {
         Inventory& operator=(const Inventory& inventory);
         virtual ~Inventory();
 
+        // Getter
+        SlotInventory getSlotInventory(string id);
+
         // Give & Discard
         bool containItem(Item* item);
         void giveItem(Item* item, int quantity);
