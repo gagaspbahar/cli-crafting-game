@@ -1,5 +1,6 @@
 #include "../header/Inventory.hpp"
 #include <cmath>
+#include <vector>
 using namespace std;
 
 int getRowCraft(int integer) {
@@ -27,12 +28,12 @@ int getColInv(int integer) {
 }
 
 Inventory::Inventory() {
-    vector<vector<SlotInventory>> inventoryContainer;
+    vector<vector<SlotInventory*>> inventoryContainer;
     for (int i = 0; i < sizeRow; i++) {
-        vector<SlotInventory> temp;
+        vector<SlotInventory*> temp;
         for (int j = 0; j < sizeCol; j++) {
-            cout << "masuk " << i << " " << j << endl;
-            SlotInventory tempslot = SlotInventory();
+            
+            SlotInventory* tempslot = new SlotInventory();
             temp.push_back(tempslot);
         }
         inventoryContainer.push_back(temp);
@@ -62,10 +63,15 @@ Inventory& Inventory::operator=(const Inventory& inv) {
 
 Inventory::~Inventory() {
     // cout << "Inventory has been destroyed" << endl;
+    for(int i = 0 ; i < sizeRow ; i++){
+        for (int j = 0 ; j < sizeCol ; j++){
+            delete this->inventoryContainer[i][j];
+        }
+    }
 }
 
 // getSlotInventory
-SlotInventory Inventory::getSlotInventory(string id) {
+SlotInventory* Inventory::getSlotInventory(string id) {
     int convertedId = convertIdToInt(id);
     int row = getRowInv(convertedId);
     int col = getColInv(convertedId);
@@ -76,8 +82,8 @@ SlotInventory Inventory::getSlotInventory(string id) {
 bool Inventory::containItem(Item* item) {
     for (int i = 0; i < sizeRow; i++) {
         for (int j = 0; j < sizeCol; j++) {
-            Item* temp = this->inventoryContainer[i][j].getItemInfo();
-            if (temp->getName() == item->getName() && this->inventoryContainer[i][j].getQuantity() < 64) {
+            Item* temp = this->inventoryContainer[i][j]->getItemInfo();
+            if (temp->getName() == item->getName() && this->inventoryContainer[i][j]->getQuantity() < 64) {
                 return true;
             }
         }
@@ -91,20 +97,20 @@ void Inventory::giveItem(Item* item, int quantity) {
     for (int i = 0; i < sizeRow; i++) {
         for (int j = 0; j < sizeCol; j++) {
             if (quantity != 0) {
-                Item* temp = this->inventoryContainer[i][j].getItemInfo();
-                if ((this->inventoryContainer[i][j].getQuantity() == 0) && (!(containItem(item)))) {
-                    this->inventoryContainer[i][j] = SlotInventory(item, quantity, slotId); // Menyimpan item di slot baru
+                Item* temp = this->inventoryContainer[i][j]->getItemInfo();
+                if ((this->inventoryContainer[i][j]->getQuantity() == 0) && (!(containItem(item)))) {
+                    this->inventoryContainer[i][j] = new SlotInventory(item, quantity, slotId); // Menyimpan item di slot baru
                     quantity = 0;
                 } else if (temp->getName() == item->getName()) {
                     if (temp->isA<NonTool>()) {
-                        if (this->inventoryContainer[i][j].getQuantity() + quantity <= 64) {
-                            this->inventoryContainer[i][j].addItemToSlot(item, quantity);
+                        if (this->inventoryContainer[i][j]->getQuantity() + quantity <= 64) {
+                            this->inventoryContainer[i][j]->addItemToSlot(item, quantity);
                             quantity = 0;
                         } else {
-                            int quantityLeft = this->inventoryContainer[i][j].getQuantity() + quantity;
+                            int quantityLeft = this->inventoryContainer[i][j]->getQuantity() + quantity;
                             quantityLeft -= 64;
                             quantity -= quantityLeft;
-                            this->inventoryContainer[i][j].addItemToSlot(item, quantity);
+                            this->inventoryContainer[i][j]->addItemToSlot(item, quantity);
                         }
                     }
                 }
@@ -121,13 +127,13 @@ void Inventory::discardItem(string id, int quantity) {
     int slotId = convertIdToInt(id);
     for (int i = 0; i < sizeRow; i++) {
         for (int j = 0; j < sizeCol; j++) {
-            Item* temp = this->inventoryContainer[i][j].getItemInfo();
-            if (this->inventoryContainer[i][j].getSlotId() == slotId) {
+            Item* temp = this->inventoryContainer[i][j]->getItemInfo();
+            if (this->inventoryContainer[i][j]->getSlotId() == slotId) {
                 if (temp->isA<NonTool>()) {
-                    if (this->inventoryContainer[i][j].getQuantity() >= quantity) {
-                        this->inventoryContainer[i][j].removeItem(quantity);
-                        if (this->inventoryContainer[i][j].getQuantity() <= 0) {
-                            this->inventoryContainer[i][j] = SlotInventory();
+                    if (this->inventoryContainer[i][j]->getQuantity() >= quantity) {
+                        this->inventoryContainer[i][j]->removeItem(quantity);
+                        if (this->inventoryContainer[i][j]->getQuantity() <= 0) {
+                            this->inventoryContainer[i][j] = new SlotInventory();
                         }
                     } else {
                         EmptyException* err = new EmptyException();
@@ -145,20 +151,20 @@ void Inventory::moveItem(string idSrc, string idDest) {
     int colSrc = getColInv(convertIdToInt(idSrc));
     int rowDest = getRowInv(convertIdToInt(idDest));
     int colDest = getColInv(convertIdToInt(idDest));
-    if ((this->inventoryContainer[rowSrc][colSrc].getNameFromSlotItem() == this->inventoryContainer[rowDest][colDest].getNameFromSlotItem()) && (this->inventoryContainer[rowSrc][colSrc].getCategoryFromSlotItem() == this->inventoryContainer[rowDest][colDest].getCategoryFromSlotItem()) && ((this->inventoryContainer[rowSrc][colSrc].getItemInfo())->isA<NonTool>()) && ((this->inventoryContainer[rowDest][colDest].getItemInfo())->isA<NonTool>())) {
+    if ((this->inventoryContainer[rowSrc][colSrc]->getNameFromSlotItem() == this->inventoryContainer[rowDest][colDest]->getNameFromSlotItem()) && (this->inventoryContainer[rowSrc][colSrc]->getCategoryFromSlotItem() == this->inventoryContainer[rowDest][colDest]->getCategoryFromSlotItem()) && ((this->inventoryContainer[rowSrc][colSrc]->getItemInfo())->isA<NonTool>()) && ((this->inventoryContainer[rowDest][colDest]->getItemInfo())->isA<NonTool>())) {
         // Move
         int quantityToMove;
-        if (this->inventoryContainer[rowSrc][colSrc].getQuantity() <= this->inventoryContainer[rowDest][colDest].getEmptyQuantity()) {
+        if (this->inventoryContainer[rowSrc][colSrc]->getQuantity() <= this->inventoryContainer[rowDest][colDest]->getEmptyQuantity()) {
             // Move seluruh item dari origin slot ke destination slot
-            quantityToMove = this->inventoryContainer[rowSrc][colSrc].getQuantity();
+            quantityToMove = this->inventoryContainer[rowSrc][colSrc]->getQuantity();
         } else {
             // Move sebagian item, yakni sejumlah sisa kapasitas destination slot yang ada
-            quantityToMove = this->inventoryContainer[rowDest][colDest].getEmptyQuantity();
+            quantityToMove = this->inventoryContainer[rowDest][colDest]->getEmptyQuantity();
         }
         // Add
-        this->inventoryContainer[rowDest][colDest].addItemToSlot(this->inventoryContainer[rowSrc][colSrc].getItemInfo(), quantityToMove);
+        this->inventoryContainer[rowDest][colDest]->addItemToSlot(this->inventoryContainer[rowSrc][colSrc]->getItemInfo(), quantityToMove);
         // Remove
-        this->inventoryContainer[rowSrc][colSrc].removeItem(quantityToMove);
+        this->inventoryContainer[rowSrc][colSrc]->removeItem(quantityToMove);
     } else {
         DifferentItemException* err = new DifferentItemException();
         throw err;
@@ -171,17 +177,17 @@ void Inventory::moveToCrafting(string slotIdInventory, int N, string* slotIdCraf
     int colInventory = getColInv(convertIdToInt(slotIdInventory)); 
     int rowCrafting, colCrafting;
     int idx = N;
-    if (this->inventoryContainer[rowInventory][colInventory].getQuantity() >= N) {
+    if (this->inventoryContainer[rowInventory][colInventory]->getQuantity() >= N) {
         if (N < 9) {
             for (int i = N - 1; i >= 0; i--) {
                 idx--;
                 rowCrafting = getRowCraft(convertIdToInt(slotIdCrafting[idx]));
                 colCrafting = getColCraft(convertIdToInt(slotIdCrafting[idx]));
                 // Add item to crafting
-                table.setItem(this->inventoryContainer[rowInventory][colInventory].getItemInfo(), rowCrafting, colCrafting);
+                table.setItem(this->inventoryContainer[rowInventory][colInventory]->getItemInfo(), rowCrafting, colCrafting);
             }
             // Remove item from inventory
-            this->inventoryContainer[rowInventory][colInventory].removeItem(N);
+            this->inventoryContainer[rowInventory][colInventory]->removeItem(N);
         }
     }
 }
@@ -191,12 +197,12 @@ void Inventory::showInventory() {
     int slotId = 0;
     for (int i = 0; i < sizeRow; i++) {
         for (int j = 0; j < sizeCol; j++) {
-            Item* temp = this->inventoryContainer[i][j].getItemInfo();
-            if (this->inventoryContainer[i][j].getQuantity() == 0) {
+            Item* temp = this->inventoryContainer[i][j]->getItemInfo();
+            if (this->inventoryContainer[i][j]->getQuantity() == 0) {
                 cout << "[ I " << slotId << " ] ";
             } else if (temp->isA<NonTool>()) {
                 NonTool* nt = dynamic_cast<NonTool*>(temp);
-                cout << "[ " << nt->getName() << "," << this->inventoryContainer[i][j].getQuantity() << " ] ";
+                cout << "[ " << nt->getName() << "," << this->inventoryContainer[i][j]->getQuantity() << " ] ";
             } else {
                 Tool* t = dynamic_cast<Tool*>(temp);
                 cout << "[ " << t->getName() << "," << t->getDura() << " ] ";
@@ -212,9 +218,9 @@ void Inventory::exportInventory(string outputPath) {
     ofstream outputFile(outputPath);
     for (int i = 0; i < sizeRow; i++) {
         for (int j = 0; j < sizeCol; j++) {
-            Item* temp = this->inventoryContainer[i][j].getItemInfo();
+            Item* temp = this->inventoryContainer[i][j]->getItemInfo();
             if (temp->isA<NonTool>()) {
-                outputFile << temp->getId() << ":" << this->inventoryContainer[i][j].getQuantity() << endl;
+                outputFile << temp->getId() << ":" << this->inventoryContainer[i][j]->getQuantity() << endl;
             } else {
                 Tool* t = dynamic_cast<Tool*>(temp);
                 outputFile << t->getId() << ":" << t->getDura() << endl;
@@ -235,21 +241,21 @@ void Inventory::moveToInventory(CraftingTable table, string slotIdCrafting, stri
     if (temp->getId() == 0) {
         cout << "There is no item in slot " << slotIdCrafting << " in crafting table." << endl;
     } else {
-        SlotInventory inventoryContainer = this->getSlotInventory(slotIdInventory);
+        SlotInventory* inventoryContainer = this->getSlotInventory(slotIdInventory);
         // 2. Slot pada inventory yang dituju masih kosong -> bisa move item
-        if (inventoryContainer.getQuantity() == 0) {
-            inventoryContainer.addItemToSlot(temp, 1);
+        if (inventoryContainer->getQuantity() == 0) {
+            inventoryContainer->addItemToSlot(temp, 1);
             table.setItem(new NonTool(), rowCrafting, colCrafting);
         } else {
-            bool sameName = inventoryContainer.getNameFromSlotItem() == temp->getName();
+            bool sameName = inventoryContainer->getNameFromSlotItem() == temp->getName();
             // 3. Slot pada inventory yang dituju telah terisi item yang sama
             if (sameName) {
                 // Cek jenis item: Tool -> tidak bisa ditumpuk, NonTool -> lakukan move item
                 if (temp->isA<Tool>()) {
                     cout << "Item can't be moved since Tool can't be stacked." << endl;
                 } else {
-                    if (inventoryContainer.getEmptyQuantity() >= 1) {
-                        inventoryContainer.addItemToSlot(temp, 1);
+                    if (inventoryContainer->getEmptyQuantity() >= 1) {
+                        inventoryContainer->addItemToSlot(temp, 1);
                     } else {
                         cout << "Slot " << slotIdInventory << " is full." << endl;
                     }

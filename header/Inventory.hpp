@@ -16,7 +16,7 @@ int getRowCraft(int integer);
 
 class Inventory {
     protected:
-        vector<vector<SlotInventory>> inventoryContainer;
+        vector<vector<SlotInventory*>> inventoryContainer;
         const int sizeRow = 3;
         const int sizeCol = 9;
         int quantity;
@@ -27,7 +27,7 @@ class Inventory {
         virtual ~Inventory();
 
         // Getter
-        SlotInventory getSlotInventory(string id);
+        SlotInventory* getSlotInventory(string id);
 
         // Give & Discard
         bool containItem(Item* item);
