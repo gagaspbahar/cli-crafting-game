@@ -42,7 +42,7 @@ string Item::getName() const {
 
 // SETTER
 void Item::setId(int id) {
-    //this->id = id;
+    this->id = id;
     // TODO : id mending const atau ga?
 }
 
@@ -53,6 +53,18 @@ void Item::setName(string name) {
 void Item::setCategory(string category) {
     this->category = category;
 }
+
+void Item::setDura(int i){
+    
+}
+
+void Item::setQty(int i){
+    
+}
+
+// bool Item::isTool(){
+//     return false;
+// }
 
 // OPERATOR ASSIGNMENT
 Item& Item::operator=(const Item& item){
@@ -67,15 +79,27 @@ bool operator==(const Item& i1, const Item& i2) {
     return ((i1.getId() == i2.getId()) && (i1.getName() == i2.getName()) && (i1.getCategory() == i2.getCategory()));
 }
 
-Item& Item::operator +=(int){
-    return *this;
-}
+// Item& Item::operator +=(int){
+//     return *this;
+// }
 
-Item& Item::operator -=(int){
-    return *this;
-}
+// Item& Item::operator -=(int){
+//     return *this;
+// }
 
 // USE FUNCTION
 void Item::use(){
     
+}
+
+int Item::getDura() const {
+    return -1;
+}
+
+int Item::getQty() const{
+    return -1;
+}
+
+string Item::getType() const{
+    return "";
 }

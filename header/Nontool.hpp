@@ -23,15 +23,18 @@ public :
     string getType() const;
     
     // SETTER
+    void setDura(int);
     void setQty(int);
     void setType(string);
 
     void use();
+    //bool isTool();
     
     // OPERATOR OVERLOADING
     friend ostream & operator <<(ostream&, const NonTool&);
-    Item& operator +=(int);
-    Item& operator -=(int);
+    NonTool& operator=(const NonTool& item);
+    NonTool& operator +=(int);
+    NonTool& operator -=(int);
 };
 //(derivation from nonTool -> Stone dll)
 

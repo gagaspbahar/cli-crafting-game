@@ -3,11 +3,9 @@
 #include "./header/CraftingTable.hpp"
 #include "./header/Exception.hpp"
 #include "./header/Inventory.hpp"
-#include "./header/InventoryException.hpp"
 #include "./header/Item.hpp"
 #include "./header/Nontool.hpp"
 #include "./header/Recipe.hpp"
-#include "./header/SlotInventory.hpp"
 #include "./header/Tool.hpp"
 
 using namespace std;
@@ -19,17 +17,20 @@ int main(){
   Config config;
   config.getItemFromText();
   config.getRecipesFromText();
-
-  Inventory inventory;
-
-  CraftingTable* table = new CraftingTable();
+  cout << "Config loaded" << endl;
+  Inventory inventory = Inventory();
+  cout << "Inventory loaded" << endl;
+  CraftingTable table = CraftingTable();
 
   cout << "Done!\n" << endl;
   cout << "What do you want to do?" << endl;
 
   string command;
-  while(cin >> command){
+  while(cout << ">> " && cin >> command){
     if(command == "SHOW"){
+      cout << "===== CRAFTING TABLE =====" << endl;
+      table.printTable();
+      cout << "===== INVENTORY =====" << endl;
       inventory.showInventory();
     }
     else if (command == "GIVE"){
@@ -37,13 +38,19 @@ int main(){
       int itemQty;
       cin >> itemName >> itemQty;
       int itemID = config.getIDFromName(itemName);
-      string itemCategory = config.getCategoryFromID(itemID);
-      Item* tempItem = new Item(itemID, itemName, itemCategory);
-      inventory.giveItem(tempItem, itemQty);
+      if(itemID == -1){
+        cout << "No item with that name." << endl;
+      }
+      else{
+        string itemCategory = config.getCategoryFromID(itemID);
+        Item* tempItem = new Item(itemID, itemName, itemCategory);
+        inventory.giveItem(tempItem, itemQty);
+      }
     }
     else if (command == "DISCARD"){
       string inventorySlot;
       int itemQty;
+      cin >> inventorySlot >> itemQty;
       inventory.discardItem(inventorySlot, itemQty);
     }
     else if (command == "MOVE"){
@@ -54,25 +61,46 @@ int main(){
 
       if (slotSrc[0] == 'I' && slotDest[0] == 'C'){
         // Case inven to crafting
-        string stringArray[10] = {0};
-        Config::stringParse(slotDest, stringArray);
-        inventory.moveToCrafting(slotSrc, slotQty, stringArray, *table);
+        vector<string> stringArray;
+        stringArray.push_back(slotDest);
+        string temps;
+        for(int i = 1; i < slotQty; i++){
+          cin >> temps;
+          stringArray.push_back(temps);
+        }
+        if(slotQty != stringArray.size()){
+          cout << "Jumlah slot dan jumlah yang akan dipindah tidak sama. Command tidak valid. Panjang array: " << stringArray.size() << endl;
+        }
+        else{
+          inventory.invToCrafting(slotSrc, slotQty, stringArray, &table);
+        }
       } else if (slotSrc[0] == 'I' && slotDest[0] == 'I'){
         // Case inven to inven
-        inventory.moveItem(slotSrc, slotDest);
+        inventory.invToInv(slotSrc, slotDest);
       } else if (slotSrc[0] == 'C' && slotDest[0] == 'I'){
         // case crafting to inven
-        table->moveToInventory(inventory, slotSrc, slotDest);
+        inventory.craftingToInv(&table, slotSrc, slotDest);
       }
 
     }
     else if (command == "USE"){
       string inventorySlot;
       cin >> inventorySlot;
-      // TODO: Getter inventoryslot return item?
+      Item* currentItem = inventory.getItemFromSlot(inventorySlot);
+      if(currentItem->getCategory() == "TOOL"){
+        currentItem->use();
+        if(currentItem->getDura() == 0){
+          inventory.discardItem(inventorySlot,1);
+        }
+        
+      }
+      else{
+        cout << "Non-tool items can't be used." << endl;
+      }
     }
     else if (command == "CRAFT"){
-      table->craft(config);
+      Item* tempItem = table.craft(config);
+      inventory.giveItem(tempItem, tempItem->getQty());
     }
     else if (command == "EXPORT"){
       string outputPath;
@@ -90,6 +118,7 @@ int main(){
     else{
       cout << "Invalid command! Please try again." << endl;
     }
+    cout << endl;
   }
   return 0;
 }

@@ -10,10 +10,10 @@ all: compile test check
 
 # Compile all cpp files except check.cpp
 compile:
-	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS)
+	g++ -std=c++17 -o main main.cpp src/Config.cpp src/CraftingTable.cpp src/Inventory.cpp src/Item.cpp src/Nontool.cpp src/Recipe.cpp src/SlotInventory.cpp src/Tool.cpp
 
 # Test
-test: $(TC_FOLDER)/*.$(EXT_IN) $(EXECUTABLE_FILENAME)
+test: 
 	for inputfile in $(TC_FOLDER)/*.$(EXT_IN); do \
 		./$(EXECUTABLE_FILENAME) < $$inputfile; \
 	done;
@@ -23,8 +23,7 @@ check: FORCE check.cpp
 	g++ -std=c++17 -o check check.cpp
 	./check
 
-compiletest:
-	g++ -std=c++17 -o main main.cpp src/Config.cpp src/CraftingTable.cpp src/Inventory.cpp src/Item.cpp src/Nontool.cpp src/Recipe.cpp src/SlotInventory.cpp src/Tool.cpp
+run: 
 	./main
 
 FORCE: ;

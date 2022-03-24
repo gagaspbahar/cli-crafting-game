@@ -1,12 +1,6 @@
 #include "../header/CraftingTable.hpp"
 
-int getRowCraft(int integer) {
-    return (int)(integer / 3);
-}
-
-int getColCraft(int integer) {
-    return (integer % 3);
-}
+using namespace std;
 
 CraftingTable::CraftingTable() {
 	vector<vector<Item*>> table;
@@ -105,7 +99,7 @@ bool CraftingTable::isAllTool(){
 	bool status = true;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if(this->table[i][j]->getId() != 0 && this->table[i][j]->getCategory() != "Tool"){
+			if(this->table[i][j]->getId() != 0 && this->table[i][j]->getCategory() != "TOOL"){
 				status = false;
 				return status;
 			}
@@ -118,7 +112,7 @@ bool CraftingTable::isAllNonTool(){
 	bool status = true;
 	for (int i = 0; i < 3 && status; i++) {
 		for (int j = 0; j < 3 && status; j++) {
-			status = (this->table[i][j]->getId() == 0) || (this->table[i][j]->getCategory() == "NonTool");
+			status = (this->table[i][j]->getId() == 0) || (this->table[i][j]->getCategory() == "NONTOOL");
 		}
 	}
 	return status;
@@ -149,6 +143,7 @@ vector<vector<vector<Item*>> > CraftingTable::getSubmatrices(int w, int h) {
 			submatrices.push_back(submatrix);
 		}
 	}
+	return submatrices;
 }
 
 bool CraftingTable::isCompositionValid(Config config, string name) {
@@ -172,6 +167,7 @@ bool CraftingTable::isCompositionValid(Config config, string name) {
 	return statusName || statusType;
 }
 
+// TODO
 bool CraftingTable::isPatternValid(Config config, string item){
 	/* I.S. : Config terdefinisi, item terdefinisi */
 	/* F.S. : Mengembalikan true jika pattern yang dibutuhkan untuk membuat item tersebut sesuai dengan resep*/
@@ -201,6 +197,7 @@ bool CraftingTable::isPatternValid(Config config, string item){
 }
 
 Item* CraftingTable::craft(Config config){
+	cout << "fungsi" << endl;
 	if(isAllTool() && isTwoTool()){
 		vector<Item*> itemOnTable = getToolOnTable();
 		int newDura = itemOnTable[0]->getDura() + itemOnTable[1]->getDura();
@@ -213,8 +210,11 @@ Item* CraftingTable::craft(Config config){
 	if(this->isAllNonTool()){
 		Recipe recipe = config.getRecipe();
 		for (int i=0; i< config.getItemList().size(); i++){
+			cout << i << endl;
 			if(isCompositionValid(config, config.getItemList()[i].name)){
+				cout << "comp" << endl;
 				if(isPatternValid(config, config.getItemList()[i].name)){
+					cout << "pattern" << endl;
 					// NGUMPULIN QTY BAHAN2 DI MEJA DIAMOND SWORD [ DIAMOND 2 , DIAMOND 2 , KAYU 1]
 					// [ DIAMOND 1 , DIAMOND 1 , KAYU 1] -> min(2/1, 2/1, 1/1)
 					int count = 64;
@@ -243,55 +243,17 @@ Item* CraftingTable::craft(Config config){
 				}
 			}
 		}
-		return new NonTool();
 	}
-}
-
-void CraftingTable::moveToInventory(Inventory& inv, string slotIdCrafting, string slotIdInventory) {
-    int rowCrafting = getRowCraft(convertIdToInt(slotIdCrafting));
-    int colCrafting = getColCraft(convertIdToInt(slotIdCrafting));
-    int rowInventory = getRowInv(convertIdToInt(slotIdInventory));
-    int colInventory = getColInv(convertIdToInt(slotIdInventory));
-    Item* temp = this->getItem(rowCrafting, colCrafting);
-    // Possible cases:
-    // 1. Slot pada CraftingTable kosong -> tidak ada item yang bisa di-move
-    if (temp == NULL) {
-        cout << "There is no item in slot " << slotIdCrafting << " in crafting table." << endl;
-    } else {
-        SlotInventory inventoryContainer = inv.getSlotInventory(slotIdInventory);
-        // 2. Slot pada inventory yang dituju masih kosong -> bisa move item
-        if (inventoryContainer.getQuantity() == 0) {
-            inventoryContainer.addItemToSlot(temp, 1);
-            this->setItem(NULL, rowCrafting, colCrafting);
-        } else {
-            bool sameType = inventoryContainer.getNameFromSlotItem() == temp->getName();
-            // 3. Slot pada inventory yang dituju telah terisi item dengan jenis yang sama
-            if (sameType) {
-                // Cek jenis item: Tool -> tidak bisa ditumpuk, NonTool -> lakukan move item
-                if (temp->isA<Tool>()) {
-                    cout << "Item can't be moved since Tool can't be stacked." << endl;
-                } else {
-                    if (inventoryContainer.getEmptyQuantity() >= 1) {
-                        inventoryContainer.addItemToSlot(temp, 1);
-                    } else {
-                        cout << "Slot " << slotIdInventory << " is full." << endl;
-                    }
-                }
-            // 4. Slot pada inventory yang dituju telah terisi item yang berbeda -> tidak bisa move item
-            } else {
-                DifferentItemException* err = new DifferentItemException();
-                throw err;
-            }
-        }
-    }
+	cout << "gamasuk apa apa jir" << endl;
+	return new NonTool();
 }
 
 void CraftingTable::printTable() {
     // Get Max ItemName length
-	int mw = 0;
+	int mw = 3; // c/: C 8
 	for(int i = 0 ; i < 3; i++){
 		for(int j = 0 ; j < 3 ;j++){
-			int tempLength = this->table[i][j]->getName().length();
+			int tempLength = this->table[i][j]->getName().length() + 2;
 			if (tempLength > mw){
 				mw = tempLength;
 			}
@@ -303,20 +265,44 @@ void CraftingTable::printTable() {
 		cout << "-";
 	}
 	cout << endl;
+	int slotId = 0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			int ws = this->table[i][j]->getName().length();
+			// Kasus Slot Kosong
+			int ws;
 			cout << "|";
-			for(int space = 0 ; space < (mw - ws)/2 ; space++){
-				cout << " ";
-			} 
-			cout << this->table[i][j]->getName();
-			for(int space = 0 ; space < (mw - ws)/2 + (ws%2 != 0); space++){
-				cout << " ";
-			} 
+			if (this->table[i][j]->getId() == 0){
+				ws = 3;
+                for(int space = 0 ; space < (mw - ws)/2 ; space++){
+                    cout << " ";
+                }
+                cout << "C " << slotId;
+                for(int space = 0 ; space < (mw - ws)/2 + (ws%2 != 0); space++){
+                    cout << " ";
+                }
+			}
+			// Kasus Slot Tidak Kosong
+			else {
+				ws = this->table[i][j]->getName().length();
+				for(int space = 0 ; space < (mw - ws)/2 ; space++){
+					cout << " ";
+				} 
+				cout << this->table[i][j]->getName() << " ";
+				if (this->table[i][j]->getCategory() == "NONTOOL"){
+                    cout << this->table[i][j]->getQty();
+                } 
+                // Kasus Tool (print quantity)
+                else {
+                    cout << this->table[i][j]->getDura();
+                }
+				for(int space = 0 ; space < (mw - ws)/2 + (ws%2 != 0); space++){
+					cout << " ";
+				} 
+			}
+			slotId++;
 		}
 		cout << "|" << endl;
-		for(int line = 0 ; line < mw*3+4 ; line++){
+		for(int line = 0 ; line < mw*3 + 4 ; line++){
 			cout << "-";
 		}
 		cout << endl;
