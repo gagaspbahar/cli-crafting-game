@@ -247,6 +247,45 @@ Item* CraftingTable::craft(Config config){
 	}
 }
 
+void CraftingTable::moveToInventory(Inventory& inv, string slotIdCrafting, string slotIdInventory) {
+    int rowCrafting = getRowCraft(convertIdToInt(slotIdCrafting));
+    int colCrafting = getColCraft(convertIdToInt(slotIdCrafting));
+    int rowInventory = getRowInv(convertIdToInt(slotIdInventory));
+    int colInventory = getColInv(convertIdToInt(slotIdInventory));
+    Item* temp = this->getItem(rowCrafting, colCrafting);
+    // Possible cases:
+    // 1. Slot pada CraftingTable kosong -> tidak ada item yang bisa di-move
+    if (temp == NULL) {
+        cout << "There is no item in slot " << slotIdCrafting << " in crafting table." << endl;
+    } else {
+        SlotInventory inventoryContainer = inv.getSlotInventory(slotIdInventory);
+        // 2. Slot pada inventory yang dituju masih kosong -> bisa move item
+        if (inventoryContainer.getQuantity() == 0) {
+            inventoryContainer.addItemToSlot(temp, 1);
+            this->setItem(NULL, rowCrafting, colCrafting);
+        } else {
+            bool sameType = inventoryContainer.getNameFromSlotItem() == temp->getName();
+            // 3. Slot pada inventory yang dituju telah terisi item dengan jenis yang sama
+            if (sameType) {
+                // Cek jenis item: Tool -> tidak bisa ditumpuk, NonTool -> lakukan move item
+                if (temp->isA<Tool>()) {
+                    cout << "Item can't be moved since Tool can't be stacked." << endl;
+                } else {
+                    if (inventoryContainer.getEmptyQuantity() >= 1) {
+                        inventoryContainer.addItemToSlot(temp, 1);
+                    } else {
+                        cout << "Slot " << slotIdInventory << " is full." << endl;
+                    }
+                }
+            // 4. Slot pada inventory yang dituju telah terisi item yang berbeda -> tidak bisa move item
+            } else {
+                DifferentItemException* err = new DifferentItemException();
+                throw err;
+            }
+        }
+    }
+}
+
 void CraftingTable::printTable() {
     // Get Max ItemName length
 	int mw = 0;

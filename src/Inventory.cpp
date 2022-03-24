@@ -1,5 +1,6 @@
 #include "../header/Inventory.hpp"
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 int convertIdToInt(string id) {
@@ -48,6 +49,14 @@ Inventory& Inventory::operator=(const Inventory& inv) {
 
 Inventory::~Inventory() {
     // cout << "Inventory has been destroyed" << endl;
+}
+
+// getSlotInventory
+SlotInventory Inventory::getSlotInventory(string id) {
+    int convertedId = convertIdToInt(id);
+    int row = getRowInv(convertedId);
+    int col = getColInv(convertedId);
+    return this->inventoryContainer[row][col];
 }
 
 // containItem
