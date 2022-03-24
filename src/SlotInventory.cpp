@@ -34,6 +34,18 @@ SlotInventory::SlotInventory(const SlotInventory& si) {
     }
 }
 
+SlotInventory& SlotInventory::operator=(const SlotInventory& si){
+    this->slotId = si.slotId;
+    if (quantity <= capacity){
+        this->quantity = si.quantity;
+        this->slotContainer = si.slotContainer;
+    } else {
+        FullException* err = new FullException();
+        throw err;
+    }
+    return *this;
+}
+
 SlotInventory::~SlotInventory() {
     // cout << "SlotInventory has been destroyed" << endl;
 }

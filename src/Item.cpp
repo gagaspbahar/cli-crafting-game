@@ -42,7 +42,7 @@ string Item::getName() const {
 
 // SETTER
 void Item::setId(int id) {
-    //this->id = id;
+    this->id = id;
     // TODO : id mending const atau ga?
 }
 
@@ -52,6 +52,14 @@ void Item::setName(string name) {
 
 void Item::setCategory(string category) {
     this->category = category;
+}
+
+void Item::setDura(int i){
+    
+}
+
+void Item::setQty(int i){
+    
 }
 
 // OPERATOR ASSIGNMENT
@@ -78,4 +86,16 @@ Item& Item::operator -=(int){
 // USE FUNCTION
 void Item::use(){
     
+}
+
+int Item::getDura() const {
+    return -1;
+}
+
+int Item::getQty() const{
+    return -1;
+}
+
+string Item::getType() const{
+    return "";
 }

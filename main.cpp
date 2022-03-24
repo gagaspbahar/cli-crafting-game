@@ -19,10 +19,10 @@ int main(){
   Config config;
   config.getItemFromText();
   config.getRecipesFromText();
-
-  Inventory inventory;
-
-  CraftingTable* table = new CraftingTable();
+  cout << "Config loaded" << endl;
+  Inventory inventory = Inventory();
+  cout << "Inventory loaded" << endl;
+  CraftingTable table = CraftingTable();
 
   cout << "Done!\n" << endl;
   cout << "What do you want to do?" << endl;
@@ -56,13 +56,13 @@ int main(){
         // Case inven to crafting
         string stringArray[10] = {0};
         Config::stringParse(slotDest, stringArray);
-        inventory.moveToCrafting(slotSrc, slotQty, stringArray, *table);
+        inventory.moveToCrafting(slotSrc, slotQty, stringArray, table);
       } else if (slotSrc[0] == 'I' && slotDest[0] == 'I'){
         // Case inven to inven
         inventory.moveItem(slotSrc, slotDest);
       } else if (slotSrc[0] == 'C' && slotDest[0] == 'I'){
         // case crafting to inven
-        table->moveToInventory(inventory, slotSrc, slotDest);
+        inventory.moveToInventory(table, slotSrc, slotDest);
       }
 
     }
@@ -72,7 +72,7 @@ int main(){
       // TODO: Getter inventoryslot return item?
     }
     else if (command == "CRAFT"){
-      table->craft(config);
+      table.craft(config);
     }
     else if (command == "EXPORT"){
       string outputPath;

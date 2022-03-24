@@ -1,7 +1,14 @@
 #include "../header/Inventory.hpp"
-#include <iostream>
 #include <cmath>
 using namespace std;
+
+int getRowCraft(int integer) {
+    return (int)(integer / 3);
+}
+
+int getColCraft(int integer) {
+    return (integer % 3);
+}
 
 int convertIdToInt(string id) {
     int temp;
@@ -20,12 +27,18 @@ int getColInv(int integer) {
 }
 
 Inventory::Inventory() {
+    vector<vector<SlotInventory>> inventoryContainer;
     for (int i = 0; i < sizeRow; i++) {
+        vector<SlotInventory> temp;
         for (int j = 0; j < sizeCol; j++) {
-            inventoryContainer[i][j] = SlotInventory();
+            cout << "masuk " << i << " " << j << endl;
+            SlotInventory tempslot = SlotInventory();
+            temp.push_back(tempslot);
         }
+        inventoryContainer.push_back(temp);
     }
     this->quantity = 0;
+    this->inventoryContainer = inventoryContainer;
 }
 
 Inventory::Inventory(const Inventory& inv) {
@@ -205,6 +218,46 @@ void Inventory::exportInventory(string outputPath) {
             } else {
                 Tool* t = dynamic_cast<Tool*>(temp);
                 outputFile << t->getId() << ":" << t->getDura() << endl;
+            }
+        }
+    }
+}
+
+
+void Inventory::moveToInventory(CraftingTable table, string slotIdCrafting, string slotIdInventory) {
+    int rowCrafting = getRowCraft(convertIdToInt(slotIdCrafting));
+    int colCrafting = getColCraft(convertIdToInt(slotIdCrafting));
+    int rowInventory = getRowInv(convertIdToInt(slotIdInventory));
+    int colInventory = getColInv(convertIdToInt(slotIdInventory));
+    Item* temp = table.getItem(rowCrafting, colCrafting);
+    // Possible cases:
+    // 1. Slot pada CraftingTable kosong -> tidak ada item yang bisa di-move
+    if (temp->getId() == 0) {
+        cout << "There is no item in slot " << slotIdCrafting << " in crafting table." << endl;
+    } else {
+        SlotInventory inventoryContainer = this->getSlotInventory(slotIdInventory);
+        // 2. Slot pada inventory yang dituju masih kosong -> bisa move item
+        if (inventoryContainer.getQuantity() == 0) {
+            inventoryContainer.addItemToSlot(temp, 1);
+            table.setItem(new NonTool(), rowCrafting, colCrafting);
+        } else {
+            bool sameName = inventoryContainer.getNameFromSlotItem() == temp->getName();
+            // 3. Slot pada inventory yang dituju telah terisi item yang sama
+            if (sameName) {
+                // Cek jenis item: Tool -> tidak bisa ditumpuk, NonTool -> lakukan move item
+                if (temp->isA<Tool>()) {
+                    cout << "Item can't be moved since Tool can't be stacked." << endl;
+                } else {
+                    if (inventoryContainer.getEmptyQuantity() >= 1) {
+                        inventoryContainer.addItemToSlot(temp, 1);
+                    } else {
+                        cout << "Slot " << slotIdInventory << " is full." << endl;
+                    }
+                }
+            // 4. Slot pada inventory yang dituju telah terisi item yang berbeda -> tidak bisa move item
+            } else {
+                DifferentItemException* err = new DifferentItemException();
+                throw err;
             }
         }
     }

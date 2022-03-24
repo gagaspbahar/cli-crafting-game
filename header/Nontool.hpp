@@ -23,6 +23,7 @@ public :
     string getType() const;
     
     // SETTER
+    void setDura(int);
     void setQty(int);
     void setType(string);
 

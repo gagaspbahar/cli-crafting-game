@@ -20,6 +20,8 @@ public :
     
     // GETTER
     int getDura() const;
+    // int getQty() const;
+    // string getType() const;
     
     // SETTER
     void setDura(int);

@@ -39,6 +39,11 @@ void NonTool::setType(string type){
     this->type = type;
 }
 
+void NonTool::setDura(int Dura){
+
+}
+
+// USE
 void NonTool::use(){
     
 }

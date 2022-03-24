@@ -25,10 +25,22 @@ int Tool::getDura() const{
     return this->durability;
 }
 
+// int Tool::getQty() const{
+//     return -1;
+// }
+
+// string Tool::getType() const{
+//     return "";
+// }
+
 // SETTER
 void Tool::setDura(int Dura){
     this->durability = Dura;
 }
+
+// void Tool::setQty(int Qty){
+    
+// }
 
 // USE
 void Tool::use(){
