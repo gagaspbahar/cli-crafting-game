@@ -19,7 +19,7 @@ M1nekraft is a CLI-based crafting game made to fulfill our uni Algorithm Strateg
 
 ## How to Use
 
-If you are using Unix based system or using windows with GNU Make, simply type `make compilerun` or `make run` on the inventory's root folder to start the application.
+If you are using Unix based system or using windows with GNU Make, simply type `make compilerun` or `make run` (if you have already compiled it) on the inventory's root folder to start the application.
 
 Feel free to use the HELP command on the application to get the list of all possible commands.
 
