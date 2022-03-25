@@ -27,8 +27,11 @@ public :
     void setQty(int);
     void setType(string);
 
+    // USE
     void use();
-    //bool isTool();
+    
+    // ISTOOL
+    bool isTool();
     
     // OPERATOR OVERLOADING
     friend ostream & operator <<(ostream&, const NonTool&);

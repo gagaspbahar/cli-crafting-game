@@ -20,21 +20,19 @@ public :
     
     // GETTER
     int getDura() const;
-    // int getQty() const;
-    // string getType() const;
     
     // SETTER
     void setDura(int);
     
     // USE
     void use();
-    // bool isTool();
+    bool isTool();
     
     // OPERATOR OVERLOADING
     friend ostream & operator <<(ostream&, const Tool&);
     Tool& operator=(const Tool& tool);
-    // Tool& operator +=(int);
-    // Tool& operator -=(int);
+    Tool& operator +=(int);
+    Tool& operator -=(int);
 };
 
 //(derivation from Tool -> Pickaxe, Axe, Sword)

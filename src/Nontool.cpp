@@ -48,9 +48,10 @@ void NonTool::use(){
     
 }
 
-// bool NonTool::isTool(){
-//     return false;
-// }
+// IS TOOL
+bool NonTool::isTool(){
+    return false;
+}
 
 // OPERATOR OVERLOADING
 ostream & operator <<(ostream& os, const NonTool& nt){
@@ -67,19 +68,19 @@ NonTool& NonTool::operator=(const NonTool& nt){
     return *this;
 }
 
-// NonTool& NonTool::operator +=(int qty){
-//     int newQty = this->getQty() + qty;
-//     if (newQty <= 64){
-//         this->setQty(newQty);
-//     } else {
-//         this->setQty(64);
-//     }
-//     return *this;
-// }
+NonTool& NonTool::operator +=(int qty){
+    int newQty = this->getQty() + qty;
+    if (newQty <= 64){
+        this->setQty(newQty);
+    } else {
+        this->setQty(64);
+    }
+    return *this;
+}
 
-// NonTool& NonTool::operator -=(int qty){
-//     int newQty = this->getQty() - qty;
-//     if (newQty < 0) newQty = 0;
-//     this->setQty(newQty);
-//     return *this;
-// }
+NonTool& NonTool::operator -=(int qty){
+    int newQty = this->getQty() - qty;
+    if (newQty < 0) newQty = 0;
+    this->setQty(newQty);
+    return *this;
+}

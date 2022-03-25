@@ -25,31 +25,19 @@ int Tool::getDura() const{
     return this->durability;
 }
 
-// int Tool::getQty() const{
-//     return -1;
-// }
-
-// string Tool::getType() const{
-//     return "";
-// }
-
 // SETTER
 void Tool::setDura(int Dura){
     this->durability = Dura;
 }
-
-// void Tool::setQty(int Qty){
-    
-// }
 
 // USE
 void Tool::use(){
     this->durability--;
 }
 
-// bool Tool::isTool(){
-//     return true;
-// }
+bool Tool::isTool(){
+    return true;
+}
 
 // OPERATOR OVERLOADING
 ostream & operator <<(ostream& os, const Tool& nt){
@@ -65,15 +53,15 @@ Tool& Tool::operator=(const Tool& item){
     return *this;
 }
 
-// Tool& Tool::operator +=(int Dura){
-//     int newDura = this->getDura() + Dura;
-//     this->setDura(newDura);
-//     return *this;
-// }
+Tool& Tool::operator +=(int Dura){
+    int newDura = this->getDura() + Dura;
+    this->setDura(newDura);
+    return *this;
+}
 
-// Tool& Tool::operator -=(int Dura){
-//     int newDura = this->getDura() - Dura;
-//     if (newDura < 0) newDura = 0;
-//     this->setDura(newDura);
-//     return *this;
-// }
+Tool& Tool::operator -=(int Dura){
+    int newDura = this->getDura() - Dura;
+    if (newDura < 0) newDura = 0;
+    this->setDura(newDura);
+    return *this;
+}
