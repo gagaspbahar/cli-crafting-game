@@ -1,0 +1,1 @@
+g++ -std=c++17 -o CraftingTableDriver CraftingTableDriver.cpp ../Item.cpp ../Tool.cpp ../Nontool.cpp ../Config.cpp ../Recipe.cpp && CraftingTableDriver

@@ -8,13 +8,14 @@ Inventory::Inventory(){
     }
 }
 
-// // Inventory::Inventory(const Inventory& inventory){
-// //     for(int i = 0; i < ROW; i++){
-// //         for(int j = 0; j < COL; j++){
-// //             this->buffer[i][j] = inventory.buffer[i][j];
-// //         }
-// //     }
-// // }
+// Inventory::Inventory(const Inventory& inventory){
+//     for(int i = 0; i < ROW; i++){
+//         for(int j = 0; j < COL; j++){
+//             this->buffer[i][j] = inventory.buffer[i][j];
+//         }
+//     }
+// }
+
 // Inventory::Inventory& operator=(const Inventory& inventory){
 //     for(int i = 0; i < ROW; i++){
 //         for(int j = 0; j < COL; j++){

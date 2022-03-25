@@ -26,6 +26,7 @@ class Config {
     int recipeCount;
     static string directory;
     static string recipe_directory;
+    static string input_directory;
   public:
     Config();
     void printHelp();
@@ -39,6 +40,7 @@ class Config {
     int getIDFromName(string name);
     vector<ItemConfig> getItemList();
     static vector<string> stringParse(string s);
+    vector<pair<int, int>> loadInventoryFromText(string filename);
 };
 
 

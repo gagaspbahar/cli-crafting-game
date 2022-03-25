@@ -104,6 +104,12 @@ public:
     }
 };
 
-
+class ItemNotFoundException : public BaseException {
+public:
+    ItemNotFoundException() {}
+    void printMessage() {
+        cout << "Item tersebut tidak ada."<< endl;
+    }
+};
 
 #endif

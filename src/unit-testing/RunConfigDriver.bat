@@ -1,0 +1,1 @@
+g++ -std=c++17 -o ConfigDriver ConfigDriver.cpp ../Recipe.cpp ../Config.cpp && ConfigDriver

@@ -129,6 +129,38 @@ int main(){
     else if (command == "HELP"){
       config.printHelp();
     }
+    else if(command == "LOAD"){
+      string inputPath;
+      cout << "Enter your desired import filename (./config/input/): ";
+      cin >> inputPath;
+      vector<pair<int,int>> inv = config.loadInventoryFromText(inputPath);
+      for(int i = 0; i < inv.size(); i++){
+        try{
+          int itemID = inv[i].first;
+          if(itemID == -1){
+            cout << "No item with that name." << endl;
+            throw ItemNotFoundException();
+          }
+          else if(inv[i].second == 0){
+            // do nothing
+          }
+          else{
+            string itemCategory = config.getCategoryFromID(itemID);
+            string itemName = config.getNameFromID(itemID);
+            Item* tempItem = new Item(itemID, itemName, itemCategory);
+            if(itemCategory == "NONTOOL"){
+              inventory.giveItem(tempItem, inv[i].second, config);
+            }
+            else{
+              inventory.giveItem(tempItem, 1, config);
+            }
+          }
+        }
+        catch(BaseException& e){
+          e.printMessage();
+        }
+      }
+    }
     else if (command == "QUIT"){
       return 0;
     }

@@ -1,0 +1,68 @@
+TC_FOLDER = tests
+EXT_IN = in
+EXT_OUT = out
+EXT_ANS = ans
+# EXECUTABLE_FILENAME = main
+# ALL_SRCS := $(wildcard *.cpp)
+# SRCS     := $(filter-out check.cpp, $(ALL_SRCS))
+MKDIR   := md
+RMDIR   := rd /S /Q
+CC      := gcc
+BIN     := ./bin
+OBJ     := ./obj
+INCLUDE := ./include
+SRC     := ./src
+ALL_SRCS    := $(wildcard $(SRC)/*.cpp)
+SRCS 		:= $(filter-out check.cpp, $(ALL_SRCS))
+OBJS    := $(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SRCS))
+EXE     := $(BIN)/main.exe
+CFLAGS  := -I$(INCLUDE)
+LDLIBS  := -lm
+
+.PHONY: all run clean
+
+compilerun: $(EXE)
+
+$(EXE):
+	$(OBJS) | $(BIN)
+	$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(OBJ)/%.o:
+	$(SRC)/%.c | $(OBJ)
+	$(CC) $(CFLAGS) -cpp $< -o $@
+
+$(BIN) $(OBJ):
+	$(MKDIR) $@
+
+run: $(EXE)
+  $<
+
+clean:
+	$(RMDIR) $(OBJ) $(BIN)
+
+# all: compile test check
+
+exec: compile run
+
+# Compile all cpp files except check.cpp
+compile:
+	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS)
+
+run:
+	./$(EXECUTABLE_FILENAME)
+
+# Test
+# test: $(TC_FOLDER)/*.$(EXT_IN) $(EXECUTABLE_FILENAME)
+# 	for inputfile in $(TC_FOLDER)/*.$(EXT_IN); do \
+# 		./$(EXECUTABLE_FILENAME) < $$inputfile; \
+# 	done;
+
+# Check
+check: FORCE check.cpp
+	g++ -std=c++17 -o check check.cpp
+	./check
+
+FORCE: ;
+
+# testmain:
+# 	g++ testmain.cpp -o testmain && ./testmain

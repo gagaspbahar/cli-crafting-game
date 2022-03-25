@@ -1,0 +1,1 @@
+g++ -std=c++17 -o InventoryDriver InventoryDriver.cpp ../Item.cpp ../Tool.cpp ../Nontool.cpp ../Config.cpp ../CraftingTable.cpp ../Recipe.cpp && InventoryDriver

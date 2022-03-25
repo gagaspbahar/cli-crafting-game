@@ -1,6 +1,3 @@
-// #include "../../header/Tool.hpp"
-// #include "../../header/Nontool.hpp"
-
 #include "../Item.cpp"
 #include "../Nontool.cpp"
 #include "../Tool.cpp"

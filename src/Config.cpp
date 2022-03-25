@@ -5,6 +5,8 @@ string Config::directory = "./config/";
 
 string Config::recipe_directory = "./config/recipe";
 
+string Config::input_directory = "./config/input";
+
 Config::Config()
 {
   this->itemList = vector<ItemConfig>();
@@ -102,7 +104,8 @@ void Config::printHelp(){
   cout << "MOVE <CRAFTING_SLOT_ID> 1 <INVENTORY_SLOT_ID> : Mengembalikan item dari slot crafting ke inventory" << endl;
   cout << "USE <INVENTORY_SLOT_ID> : Menggunakan item tool" << endl;
   cout << "CRAFT : Memulai crafting dengan item yang sudah ada pada crafting table" << endl;
-  cout << "EXPORT <NAMA_FILE> : Mengexport isi inventory ke file argumen." << endl;
+  cout << "EXPORT : Mengexport isi inventory ke file argumen." << endl;
+  cout << "LOAD : Mengimport isi inventory yang disimpan dalam bentuk file txt ke dalam state permainan saat ini." << endl;
   cout << "HELP : Menunjukkan menu bantuan untuk command-command." << endl;
   cout << "EXIT : Keluar dari program." << endl;
 }
@@ -124,4 +127,46 @@ vector<string> Config::stringParse(string s){
   }
   ans.push_back(word);
   return ans;
+}
+
+vector<pair<int, int>> Config::loadInventoryFromText(string filename)
+{
+  vector<pair<int,int>> inven;
+  try
+  {
+    ifstream input(input_directory + "/" + filename);
+    if (input.fail())
+    {
+      throw FileNotFoundException();
+    }
+    string id;
+    while (input >> id)
+    {
+      pair<int,int> temp;
+      string tempString = "";
+      int i = 0;
+      bool flag = true;
+      while(flag){
+        for(auto x : id){
+          if (x == ':')
+          {
+            temp.first = stoi(tempString);
+            i++;
+            temp.second = stoi(id.substr(i));
+            inven.push_back(temp);
+            flag = false;
+          }
+          else {
+            tempString = tempString + x;
+            i++;
+          }
+        }
+      }
+    }
+  }
+  catch (BaseException& e)
+  {
+    e.printMessage();
+  }
+  return inven;
 }
