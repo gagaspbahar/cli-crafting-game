@@ -2,6 +2,7 @@
 #define CRAFTINGTABLE_H
 
 #include <vector>
+#include <utility>
 #include "Config.hpp"
 #include "Item.hpp"
 #include "Tool.hpp"
@@ -29,7 +30,7 @@ class CraftingTable {
         bool isCompositionValid(Config,string);
         bool isPatternValid(Config,string);
         vector<vector<vector<Item*>>> getSubmatrices(int, int);
-        Item* craft(Config);
+        pair<Item*,int> craft(Config);
         void printTable();
 };
 

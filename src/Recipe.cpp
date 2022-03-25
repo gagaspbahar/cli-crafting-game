@@ -6,6 +6,7 @@ Recipe::Recipe(){
     this->item = map<string, string>();
     this->qty = map<string, int>();
     this->recipe = map<string, vector<vector<string>>>();
+    this->recipeList = vector<string>();
 }
 
 Recipe::Recipe(string path) {
@@ -48,6 +49,7 @@ Recipe::Recipe(string path) {
         this->col[item] = col;
         this->qty[item] = qty;
         this->recipe[item] = recipe;
+        this->recipeList.push_back(item);
 
         file.close();
     }
@@ -73,11 +75,15 @@ string Recipe::getRecipeComponentByLocation(string item, int row, int col) {
     return this->recipe[item][row][col];
 }
 
+vector<string> Recipe::getRecipeList(){
+    return this->recipeList;
+}
+
 vector<string> Recipe::getRecipeComponents(string item) {
     vector<string> components;
     for (int i = 0; i < this->row[item]; i++) {
         for (int j = 0; j < this->col[item]; j++) {
-            if (this->recipe[item][i][j] != "") {
+            if (this->recipe[item][i][j] != "-") {
                 components.push_back(getRecipeComponentByLocation(item, i, j));
             }
         }

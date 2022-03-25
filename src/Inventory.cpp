@@ -88,7 +88,7 @@ int Inventory::givePossibleSlot(Item* item){
     return -1;
 }
 
-void Inventory::giveItem(Item* item, int q){
+void Inventory::giveItem(Item* item, int q, Config config){
     try{
         // Check available slot
         int slot = givePossibleSlot(item);
@@ -106,11 +106,11 @@ void Inventory::giveItem(Item* item, int q){
                     //NONTOOL KOTAK KOSONG
                     if(item->getCategory() == "NONTOOL"){
                         if(quantity < 64){
-                            this->buffer[slotRow][slotCol] = new NonTool(item->getId() , item->getName(), item->getType() , quantity);
+                            this->buffer[slotRow][slotCol] = new NonTool(item->getId() , item->getName(), config.getTypeFromID(item->getId()) , quantity);
                             quantity = 0;
                         }
                         else{
-                            this->buffer[slotRow][slotCol] = new NonTool(item->getId() , item->getName(), item->getType() , 64);
+                            this->buffer[slotRow][slotCol] = new NonTool(item->getId() , item->getName(), config.getTypeFromID(item->getId()) , 64);
                             quantity -= 64;
                         }
                     }

@@ -42,6 +42,14 @@ public:
     }
 };
 
+class ToolException : public BaseException {
+public:
+    ToolException() {}
+    void printMessage() {
+        cout << "You can't stack tool."<< endl;
+    }
+};
+
 class GiveZeroItemException : public BaseException {
 public:
     GiveZeroItemException() {}
@@ -92,7 +100,7 @@ public:
       this->b = b;
     }
     void printMessage() {
-      cout << "Slot " << a << " sudah terisi item Tool berupa " << b << endl;
+      cout << "Slot " << a << " sudah terisi item berupa " << b << endl;
     }
 };
 

@@ -17,12 +17,14 @@ private:
     map<string, int> row, col, qty;
     map<string, string> item;
     map<string, vector<vector<string>>> recipe;
+    vector<string> recipeList;
 public:
     Recipe();
     Recipe(string path);
     int getRow(string item);
     int getCol(string item);
     int getQty(string item);
+    vector<string> getRecipeList();
     string getItemName(string item);
     string getRecipeComponentByLocation(string item, int row, int col);
     vector<string> getRecipeComponents(string item);

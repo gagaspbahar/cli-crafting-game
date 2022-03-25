@@ -172,7 +172,6 @@ bool CraftingTable::isPatternValid(Config config, string item){
 	/* I.S. : Config terdefinisi, item terdefinisi */
 	/* F.S. : Mengembalikan true jika pattern yang dibutuhkan untuk membuat item tersebut sesuai dengan resep*/
 	vector<vector<string>> pattern = config.getRecipe().getRecipePattern(item);
-	cout << "SOMETHING" << endl;
 	vector<vector<vector<Item*>>> submatrices = this->getSubmatrices(pattern[0].size(), pattern.size());
 	vector<vector<vector<Item*>>> mirrorSubmatrices = this->mirrorTable().getSubmatrices(pattern[0].size(), pattern.size());
 	
@@ -203,33 +202,39 @@ bool CraftingTable::isPatternValid(Config config, string item){
 	return false;
 }
 
-Item* CraftingTable::craft(Config config){
-	cout << "fungsi" << endl;
+pair<Item*,int> CraftingTable::craft(Config config){
+	pair<Item*,int> result;
 	if(isAllTool() && isTwoTool()){
 		vector<Item*> itemOnTable = getToolOnTable();
 		int newDura = itemOnTable[0]->getDura() + itemOnTable[1]->getDura();
 		if (newDura > 10){
 			newDura = 10;
 		}
+
+		for(int j=0; j < 3 ; j++){
+			for(int k =0; k<3 ; k++){
+				if(this->table[j][k]->getId() != 0){
+					this->table[j][k] = new NonTool();
+				}
+			}
+		}
 		Item* item = new Tool(itemOnTable[0]->getId(),itemOnTable[0]->getName(), newDura);
-		return item;
+		result.first = item;
+		result.second = 1;
+		return result;
 	}
 	if(this->isAllNonTool()){
 		Recipe recipe = config.getRecipe();
-		for (int i=0; i< config.getItemList().size(); i++){
-			cout << i << endl;
-			if(isCompositionValid(config, config.getItemList()[i].name)){
-				cout << "comp" << endl;
-				if(isPatternValid(config, config.getItemList()[i].name)){
-					cout << "pattern" << endl;
+		for (int i=0; i< recipe.getRecipeList().size(); i++){
+			if(isCompositionValid(config, recipe.getRecipeList()[i])){
+				if(isPatternValid(config, recipe.getRecipeList()[i])){
 					// NGUMPULIN QTY BAHAN2 DI MEJA DIAMOND SWORD [ DIAMOND 2 , DIAMOND 2 , KAYU 1]
-					// [ DIAMOND 1 , DIAMOND 1 , KAYU 1] -> min(2/1, 2/1, 1/1)
-					int count = 64;
+					int mincount = 64;
 					for(int j=0; j<3; j++){
 						for(int k=0; k<3; k++){
-							if(this->table[j][k] != 0){
-								if(count > this->table[i][j]->getQty()){
-									count = this->table[i][j]->getQty();
+							if(this->table[j][k]->getId() != 0){
+								if(mincount > this->table[j][k]->getQty()){
+									mincount = this->table[j][k]->getQty();
 								}
 							}
 						}
@@ -239,20 +244,33 @@ Item* CraftingTable::craft(Config config){
 					for(int j=0; j < 3 ; j++){
 						for(int k =0; k<3 ; k++){
 							if(this->table[j][k]->getId() != 0){
-								this->table[j][k]->setQty(this->table[j][k]->getQty() - count);
+								this->table[j][k]->setQty(this->table[j][k]->getQty() - mincount);
 								if(this->table[j][k]->getQty() == 0){
 									this->table[j][k] = new NonTool();
 								}
 							}
 						}
 					}
-					return new NonTool(config.getItemList()[i].id, config.getItemList()[i].name, config.getItemList()[i].parentClass, count*recipe.getQty(config.getItemList()[i].name));
+					int id = config.getIDFromName(recipe.getRecipeList()[i]);
+					if(config.getCategoryFromID(id) == "NONTOOL"){
+						Item* item = new NonTool(id, config.getNameFromID(id), config.getTypeFromID(id), mincount*recipe.getQty(recipe.getRecipeList()[i]));
+						result.first = item;
+						result.second = mincount*recipe.getQty(recipe.getRecipeList()[i]);
+						return result;
+					}
+					else{
+						Item* item = new Tool(id, config.getNameFromID(id), 10);
+						result.first = item;
+						result.second = mincount;
+						return result;
+					}
 				}
 			}
 		}
 	}
-	cout << "gamasuk apa apa jir" << endl;
-	return new NonTool();
+	result.first = new NonTool();
+	result.second = 0;
+	return result;
 }
 
 void CraftingTable::printTable() {
@@ -260,7 +278,7 @@ void CraftingTable::printTable() {
 	int mw = 3; // c/: C 8
 	for(int i = 0 ; i < 3; i++){
 		for(int j = 0 ; j < 3 ;j++){
-			int tempLength = this->table[i][j]->getName().length() + 2;
+			int tempLength = this->table[i][j]->getName().length() + 3;
 			if (tempLength > mw){
 				mw = tempLength;
 			}

@@ -11,7 +11,14 @@
 using namespace std;
 
 int main(){
-  cout << "Welcome to M1necraft!" << endl;
+  cout << "                                         WELCOME TO" << endl;
+  cout <<".___  ___.  __  .__   __.  _______  __  ___ .______          ___       _______ .___________." << endl;
+  cout <<"|   \\/   | /_ | |  \\ |  | |   ____||  |/  / |   _  \\        /   \\     |   ____||           |" << endl;
+  cout <<"|  \\  /  |  | | |   \\|  | |  |__   |  '  /  |  |_)  |      /  ^  \\    |  |__   `---|  |----`" << endl;
+  cout <<"|  |\\/|  |  | | |  . `  | |   __|  |    <   |      /      /  /_\\  \\   |   __|      |  |     " << endl;
+  cout <<"|  |  |  |  | | |  |\\   | |  |____ |  .  \\  |  |\\  \\----./  _____  \\  |  |         |  |     " << endl;
+  cout << "|__|  |__|  |_| |__| \\__| |_______||__|\\__\\ | _| `._____/__/     \\__\\ |__|         |__|     " << endl;
+                                                                                            
   cout << "Please wait for the configs to load.." << endl;
 
   Config config;
@@ -44,14 +51,20 @@ int main(){
       else{
         string itemCategory = config.getCategoryFromID(itemID);
         Item* tempItem = new Item(itemID, itemName, itemCategory);
-        inventory.giveItem(tempItem, itemQty);
+        inventory.giveItem(tempItem, itemQty, config);
       }
     }
     else if (command == "DISCARD"){
       string inventorySlot;
       int itemQty;
       cin >> inventorySlot >> itemQty;
-      inventory.discardItem(inventorySlot, itemQty);
+      Item* tempItem = inventory.getItemFromSlot(inventorySlot);
+      if(tempItem->getQty() < itemQty){
+        cout << "There is not enough item you're trying to discard." << endl;
+      }
+      else{
+        inventory.discardItem(inventorySlot, itemQty);
+      }
     }
     else if (command == "MOVE"){
       string slotSrc;
@@ -69,7 +82,7 @@ int main(){
           stringArray.push_back(temps);
         }
         if(slotQty != stringArray.size()){
-          cout << "Jumlah slot dan jumlah yang akan dipindah tidak sama. Command tidak valid. Panjang array: " << stringArray.size() << endl;
+          cout << "Slot N and amount of item is different. Command invalid. Array Length: " << stringArray.size() << endl;
         }
         else{
           inventory.invToCrafting(slotSrc, slotQty, stringArray, &table);
@@ -95,12 +108,16 @@ int main(){
         
       }
       else{
-        cout << "Non-tool items can't be used." << endl;
+        if (currentItem->getId() == 0){
+          cout << "Empty slot can't be used." << endl;
+        } else {
+          cout << "Non-tool items can't be used." << endl;
+        }
       }
     }
     else if (command == "CRAFT"){
-      Item* tempItem = table.craft(config);
-      inventory.giveItem(tempItem, tempItem->getQty());
+      pair<Item*, int> tempItem = table.craft(config);
+      inventory.giveItem(tempItem.first, tempItem.second, config);
     }
     else if (command == "EXPORT"){
       string outputPath;

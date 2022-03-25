@@ -7,6 +7,7 @@
 #include <cmath>
 #include "Exception.hpp"
 #include "CraftingTable.hpp"
+#include "Config.hpp"
 #define ROW 3
 #define COL 9
 
@@ -32,7 +33,7 @@ class Inventory {
         // Give & Discard
         bool containSpecificItem(Item* item, int row, int col);
         int givePossibleSlot(Item* item);
-        void giveItem(Item* item, int quantity);
+        void giveItem(Item* item, int quantity,Config config);
         void discardItem(string slot_id, int quantity);
 
         // Move

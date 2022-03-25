@@ -123,6 +123,5 @@ vector<string> Config::stringParse(string s){
     }
   }
   ans.push_back(word);
-  cout << "SIZZE COK" << ans.size() << endl;
   return ans;
 }
