@@ -172,23 +172,30 @@ bool CraftingTable::isPatternValid(Config config, string item){
 	/* I.S. : Config terdefinisi, item terdefinisi */
 	/* F.S. : Mengembalikan true jika pattern yang dibutuhkan untuk membuat item tersebut sesuai dengan resep*/
 	vector<vector<string>> pattern = config.getRecipe().getRecipePattern(item);
+	cout << "SOMETHING" << endl;
 	vector<vector<vector<Item*>>> submatrices = this->getSubmatrices(pattern[0].size(), pattern.size());
-	vector<vector<vector<Item*>>> mirrorSubmatrices = this->mirrorTable().getSubmatrices(pattern[0].size(), 														   pattern.size());
+	vector<vector<vector<Item*>>> mirrorSubmatrices = this->mirrorTable().getSubmatrices(pattern[0].size(), pattern.size());
 	
 	// Original table
 	for (int i = 0; i < submatrices.size(); i++) {
 		bool patternStatus = true;
-		bool patternStatusMirorred = true;
-		for (int j = 0; j < pattern.size() && (patternStatus||patternStatusMirorred); j++) {
-			for (int k = 0; k < pattern[j].size() && (patternStatus||patternStatusMirorred); k++) {
+		for (int j = 0; j < pattern.size() && (patternStatus); j++) {
+			for (int k = 0; k < pattern[j].size() && (patternStatus); k++) {
 				patternStatus = (pattern[j][k] == submatrices[i][j][k]->getName()) 		||
 								(pattern[j][k] == submatrices[i][j][k]->getType()) || 
 								(pattern[j][k] == "-" && submatrices[i][j][k]->getId() == 0);
+			}
+		}
+
+		bool patternStatusMirorred = true;
+		for (int j = 0; j < pattern.size() && (patternStatusMirorred); j++) {
+			for (int k = 0; k < pattern[j].size() && (patternStatusMirorred); k++) {
 				patternStatusMirorred = (pattern[j][k] == mirrorSubmatrices[i][j][k]->getName()) 		||
 										(pattern[j][k] == mirrorSubmatrices[i][j][k]->getType()) || 
 										(pattern[j][k] == "-" && mirrorSubmatrices[i][j][k]->getId() == 0);
 			}
 		}
+
 		if (patternStatus || patternStatusMirorred) {
 			return true;
 		}

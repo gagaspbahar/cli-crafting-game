@@ -12,7 +12,7 @@ compilerun: compile run
 
 # Compile all cpp files except check.cpp
 compile:
-	g++ -std=c++17 -o main main.cpp src/Config.cpp src/CraftingTable.cpp src/Inventory.cpp src/Item.cpp src/Nontool.cpp src/Recipe.cpp src/SlotInventory.cpp src/Tool.cpp
+	g++ -std=c++17 -o main main.cpp src/Config.cpp src/CraftingTable.cpp src/Inventory.cpp src/Item.cpp src/Nontool.cpp src/Recipe.cpp src/Tool.cpp
 
 # Test
 test: 
